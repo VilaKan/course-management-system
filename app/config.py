@@ -3,9 +3,11 @@ This module contains different configurations for specific
 tasks
 """
 
+
 class BaseConfig(object):
     DEBUG = False
     TESTING = False
+
 
 class DevConfig(BaseConfig):
     DEBUG = True
@@ -15,6 +17,7 @@ class DevConfig(BaseConfig):
     SECRET_KEY = 'flask+mongoengine=<3'
     DEBUG_TB_INTERCEPT_REDIRECTS = True
     WTF_CSRF_ENABLED = False
+
 
 class TestingConfig(BaseConfig):
     DEBUG = False

@@ -29,7 +29,7 @@ class LoginForm(FlaskForm):
                 return False
 
             # do the passwords match
-            if not check_password_hash(user.password,self.password.data):
+            if not check_password_hash(user.password, self.password.data):
                 self.username.errors.append('Invalid username or password')
                 return False
         except DoesNotExist:

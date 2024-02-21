@@ -1,5 +1,5 @@
-wheel
-Flask
+wheel==0.42.0
+Flask==2.2.5
 Flask-Assets
 Flask-DebugToolbar
 Flask-Login
