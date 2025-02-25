@@ -1,9 +1,10 @@
-wheel==0.42.0
-Flask==2.2.5
+wheel
+Flask
 Flask-Assets
+Flask-Session[mongodb]
 Flask-DebugToolbar
 Flask-Login
-flask-mongoengine
+flask-mongoengine-3
 Flask-WTF
 cssmin
 jsmin

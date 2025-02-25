@@ -2,9 +2,11 @@ import click
 from flask import Flask
 from flask.cli import with_appcontext
 from flask_assets import Environment
-from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
+from flask_mongoengine import MongoEngine
 from flask_login import LoginManager
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_session.mongodb import MongoDBSessionInterface
+from mongoengine.connection import get_db
 
 from webassets.loaders import PythonLoader as PythonAssetsLoader
 from werkzeug.security import generate_password_hash
@@ -33,7 +35,8 @@ def create_app(config=None):
     db.init_app(app)
 
     # use mongo engine for session store
-    app.session_interface = MongoEngineSessionInterface(db)
+    client = get_db().client
+    app.session_interface = MongoDBSessionInterface(app,client=client,permanent=False)
 
     # set up assets
     assets_env.init_app(app)
