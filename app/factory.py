@@ -79,6 +79,8 @@ def load_blueprints(app):
     from app.users.views import bp_users
     from app.main.views import bp_main
     from app.books.views import bp_books
+    from app.kurse.views import kurse_bp
+    app.register_blueprint(kurse_bp)
 
     # register blueprints
     app.register_blueprint(bp_main)

@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% from 'books/pages/_formhelpers.html' import render_field %}
+
+{% block content %}
+  <h1>Kursliste</h1>
+
+  <p>
+    <a class="btn btn-primary" href="{{ url_for('kurse.kurse_list') }}">+ Neuen Kurs anlegen</a>
+  </p>
+
+  {% if kurse %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Kursname</th>
+          <th>Kursbeschreibung</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for kurs in kurse %}
+          <tr>
+            <td>{{ kurs.kursname }}</td>
+            <td>{{ kurs.kursbeschreibung }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Es sind noch keine Kurse angelegt.</p>
+  {% endif %}
+{% endblock %}
