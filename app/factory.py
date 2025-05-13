@@ -85,11 +85,13 @@ def load_blueprints(app):
     from app.users.views import bp_users
     from app.main.views import bp_main
     from app.books.views import bp_books
+    from app.statistics.views import bp_statistics
 
     # register blueprints
     app.register_blueprint(bp_main)
     app.register_blueprint(bp_users, url_prefix='/users')
     app.register_blueprint(bp_books, url_prefix='/books')
+    app.register_blueprint(bp_statistics, url_prefix='/statistics')
 
 
 
