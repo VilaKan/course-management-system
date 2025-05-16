@@ -116,23 +116,50 @@ def create_rooms():
     click.echo('Created 2 courses')
 
 def create_courses():
-    course_one = Course(id=0, name="Programming for Beginners", description="A beginner course for everyone to learn coding!")
+    course_one = Course(id=0, name="Course 0", description="Course 0 description")
     course_one.save()
 
-    course_two = Course(id=1, name="Cooking for Beginners", description="A beginner course for everyone to learn cooking!")
+    course_two = Course(id=1, name="Course 1", description="Course 1 description")
     course_two.save()
 
-    click.echo('Created 2 courses')
+    course_three = Course(id=2, name="Course 2", description="Course 2 description")
+    course_three.save()
+
+    course_four = Course(id=3, name="Course 3", description="Course 3 description")
+    course_four.save()
+
+    course_five = Course(id=4, name="Course 4", description="Course 4 description")
+    course_five.save()
+
+    course_six = Course(id=5, name="Course 5", description="Course 5 description")
+    course_six.save()
+
+    course_seven = Course(id=6, name="Course 6", description="Course 6 description")
+    course_seven.save()
+
+    course_eight = Course(id=7, name="Course 7", description="Course 7 description")
+    course_eight.save()
+
+    course_nine = Course(id=8, name="Course 8", description="Course 8 description")
+    course_nine.save()
+
+    course_ten = Course(id=9, name="Course 9", description="Course 9 description")
+    course_ten.save()
+
+    click.echo('Created 10 courses')
 
 def create_appointments():
     ## Create Appointment
-    appointment_one = Appointment(id=0, date=datetime.datetime(2025, 1, 1), max_students=12, course=0,room=0,teacher=1, students=[2,3])
-    appointment_two = Appointment(id=1, date=datetime.datetime(2025, 1, 2), max_students=12, course=0,room=0,teacher=1, students=[2,3])
-    appointment_three = Appointment(id=2, date=datetime.datetime(2025, 1, 3), max_students=12, course=0,room=0,teacher=1, students=[2,3])
-    appointment_four = Appointment(id=3, date=datetime.datetime(2025, 1, 4), max_students=12, course=0,room=0,teacher=1, students=[2,3])
-    appointment_five = Appointment(id=4, date=datetime.datetime(2025, 1, 5), max_students=12, course=0,room=0,teacher=1, students=[2,3])
-    appointment_six = Appointment(id=5, date=datetime.datetime(2025, 1, 6), max_students=12, course=0,room=0,teacher=1, students=[2,3])
-    appointment_seven = Appointment(id=6, date=datetime.datetime(2025, 1, 7), max_students=12, course=0,room=0,teacher=1, students=[2,3])
+    appointment_one = Appointment(id=0, date=datetime.datetime(2025, 1, 1), max_students=12, course=0,room=0,teacher=1, students=[0,1,2,3,4,5,6,7,8,9])
+    appointment_two = Appointment(id=1, date=datetime.datetime(2025, 1, 2), max_students=12, course=1,room=0,teacher=1, students=[0,1,2,3,4,5,6,7,8])
+    appointment_three = Appointment(id=2, date=datetime.datetime(2025, 1, 3), max_students=12, course=2,room=0,teacher=1, students=[0,1,2,3,4,5,6,7])
+    appointment_four = Appointment(id=3, date=datetime.datetime(2025, 1, 4), max_students=12, course=3,room=0,teacher=1, students=[0,1,2,3,4,5,6])
+    appointment_five = Appointment(id=4, date=datetime.datetime(2025, 1, 5), max_students=12, course=4,room=0,teacher=1, students=[0,1,2,3,4,5])
+    appointment_six = Appointment(id=5, date=datetime.datetime(2025, 1, 6), max_students=12, course=5,room=0,teacher=1, students=[0,1,2,3,4])
+    appointment_seven = Appointment(id=6, date=datetime.datetime(2025, 1, 7), max_students=12, course=6,room=0,teacher=1, students=[0,1,2,3])
+    appointment_eight = Appointment(id=7, date=datetime.datetime(2025, 1, 8), max_students=12, course=7,room=0,teacher=1, students=[0,1,2])
+    appointment_nine = Appointment(id=8, date=datetime.datetime(2025, 1, 9), max_students=12, course=8,room=0,teacher=1, students=[0,1])
+    appointment_ten = Appointment(id=9, date=datetime.datetime(2025, 1, 10), max_students=12, course=9,room=0,teacher=1, students=[0])
     appointment_one.save()
     appointment_two.save()
     appointment_three.save()
@@ -140,8 +167,10 @@ def create_appointments():
     appointment_five.save()
     appointment_six.save()
     appointment_seven.save()
+    appointment_eight.save()
+    appointment_nine.save()
+    appointment_ten.save()
     click.echo('Created Appointments')
-
 
 def create_roles():
     ## Create Roles

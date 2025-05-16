@@ -5,7 +5,7 @@
 {% block body %}
 <h1>Statistiken</h1>
 <h2>Anzahl der Kurse pro Wochentag</h2>
-    <form action="{{ url_for('statistics.generate_year_and_month') }}" method="POST" style="display: inline;">
+    <form action="{{ url_for('statistics.generate_year_and_month') }}" method="POST" style="display: block;">
         <label for="monthSelect">Monat:</label>
         <select id="monthSelect" name="monthSelect">
           <option value="01">Januar</option>
@@ -33,11 +33,11 @@
           step="1"
           style="width: 80px;">
         <button type="submit" style="margin-left: 15px;">Generieren</button>
-        <img src="{{ url_for('static', filename='plots/appointments_pie_2025.png') }}" alt="Appointments Pie Chart">
     </form>
+    <img src="{{ url_for('static', filename='plots/appointments_pie.png') }}" alt="Appointments Pie Chart" class="img-fluid mt-1" style="max-width: 600px; max-height: 600px;">
 
 <h2>Teilnehmeranzahl pro Kurs</h2>
-    <form action="{{ url_for('statistics.generate_year_only') }}" method="POST" style="display: inline;">
+    <form action="{{ url_for('statistics.generate_year_only') }}" method="POST" style="display: block;">
         <label for="yearOnly">Jahr:</label>
         <input
         type="number"
@@ -48,6 +48,6 @@
         step="1"
         value="2025">
         <button type="submit" style="margin-left: 15px;">Generieren</button>
-        <p> STATISTIK HIER </p>
     </form>
+    <img src="{{ url_for('static', filename='plots/appointments_bars.png') }}" alt="Appointments Pie Chart" class="img-fluid mt-1" style="max-width: 600px; max-height: 600px;">
 {% endblock %}>
