@@ -107,46 +107,23 @@ def init_db_command():
     create_rooms()
 
 def create_rooms():
-    room_one = Room(id=0, name="Coding Lab")
-    room_one.save()
-
-    room_two = Room(id=1, name="Cooking Lab")
-    room_two.save()
-
-    click.echo('Created 2 courses')
+    for i in range(0, 20):
+        room = Room(
+            id=i,
+            name=f"Room {i}",
+        )
+        room.save()
+        click.echo(f'Created Room{i}')
 
 def create_courses():
-    course_one = Course(id=0, name="Course 0", description="Course 0 description")
-    course_one.save()
-
-    course_two = Course(id=1, name="Course 1", description="Course 1 description")
-    course_two.save()
-
-    course_three = Course(id=2, name="Course 2", description="Course 2 description")
-    course_three.save()
-
-    course_four = Course(id=3, name="Course 3", description="Course 3 description")
-    course_four.save()
-
-    course_five = Course(id=4, name="Course 4", description="Course 4 description")
-    course_five.save()
-
-    course_six = Course(id=5, name="Course 5", description="Course 5 description")
-    course_six.save()
-
-    course_seven = Course(id=6, name="Course 6", description="Course 6 description")
-    course_seven.save()
-
-    course_eight = Course(id=7, name="Course 7", description="Course 7 description")
-    course_eight.save()
-
-    course_nine = Course(id=8, name="Course 8", description="Course 8 description")
-    course_nine.save()
-
-    course_ten = Course(id=9, name="Course 9", description="Course 9 description")
-    course_ten.save()
-
-    click.echo('Created 10 courses')
+    for i in range(0, 20):
+        course = Course(
+            id=i,
+            name=f"Course {i}",
+            description=f"Course {i} description"
+        )
+        course.save()
+        click.echo(f'Created course {i}')
 
 def create_appointments():
     ## Create Appointment
@@ -197,16 +174,15 @@ def create_users():
     teacher.save()
     click.echo('Teacher user with username teacher@test.de and password test created')
 
-    ## Create an Student
-    student_one_email = "student_one@test.de"
-    student_one = User(id=2, username=student_one_email, password=generate_password_hash("test"), email=student_one_email, role=2,
-                       date_of_birth=datetime.datetime(1995, 1, 31))
-    student_one.save()
-    click.echo('Student user with username student_one@test.de and password test created')
-
-    ## Create an Student
-    student_two_email = "student_two@test.de"
-    student_two = User(id=3, username=student_two_email, password=generate_password_hash("test"), email=student_two_email, role=2,
-                       date_of_birth=datetime.datetime(2025, 1, 31))
-    student_two.save()
-    click.echo('Student user with username student_two@test.de and password test created')
+    for i in range(0, 11):
+        email = f"student{i}@test.de"
+        student = User(
+            id=i,
+            username=email,
+            password=generate_password_hash("test"),
+            email=email,
+            role=2,
+            date_of_birth=datetime.datetime(1995, 1, 31)
+        )
+        student.save()
+        click.echo(f'Student user with username {email} and password test created')
