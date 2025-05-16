@@ -85,11 +85,13 @@ def load_blueprints(app):
     from app.users.views import bp_users
     from app.main.views import bp_main
     from app.books.views import bp_books
+    from app.bookings.views import bp_bookings
 
     # register blueprints
     app.register_blueprint(bp_main)
     app.register_blueprint(bp_users, url_prefix='/users')
     app.register_blueprint(bp_books, url_prefix='/books')
+    app.register_blueprint(bp_bookings, url_prefix='/bookings')
 
 
 
@@ -126,6 +128,10 @@ def create_appointments():
     ## Create Appointment
     appointment = Appointment(id=0, date=datetime.datetime(1995, 1, 31), max_students=12, course=0,room=0,teacher=1, students=[2,3])
     appointment.save()
+
+    appointment2 = Appointment(id=1, date=datetime.datetime(1995, 1, 31), max_students=12, course=0, room=0, teacher=1,
+                              students=[2, 3, 4])
+    appointment2.save()
     click.echo('Created Appointment')
 
 
