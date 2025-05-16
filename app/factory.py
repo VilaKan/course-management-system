@@ -126,9 +126,21 @@ def create_courses():
 
 def create_appointments():
     ## Create Appointment
-    appointment = Appointment(id=0, date=datetime.datetime(1995, 1, 31), max_students=12, course=0,room=0,teacher=1, students=[2,3])
-    appointment.save()
-    click.echo('Created Appointment')
+    appointment_one = Appointment(id=0, date=datetime.datetime(2025, 1, 1), max_students=12, course=0,room=0,teacher=1, students=[2,3])
+    appointment_two = Appointment(id=1, date=datetime.datetime(2025, 1, 2), max_students=12, course=0,room=0,teacher=1, students=[2,3])
+    appointment_three = Appointment(id=2, date=datetime.datetime(2025, 1, 3), max_students=12, course=0,room=0,teacher=1, students=[2,3])
+    appointment_four = Appointment(id=3, date=datetime.datetime(2025, 1, 4), max_students=12, course=0,room=0,teacher=1, students=[2,3])
+    appointment_five = Appointment(id=4, date=datetime.datetime(2025, 1, 5), max_students=12, course=0,room=0,teacher=1, students=[2,3])
+    appointment_six = Appointment(id=5, date=datetime.datetime(2025, 1, 6), max_students=12, course=0,room=0,teacher=1, students=[2,3])
+    appointment_seven = Appointment(id=6, date=datetime.datetime(2025, 1, 7), max_students=12, course=0,room=0,teacher=1, students=[2,3])
+    appointment_one.save()
+    appointment_two.save()
+    appointment_three.save()
+    appointment_four.save()
+    appointment_five.save()
+    appointment_six.save()
+    appointment_seven.save()
+    click.echo('Created Appointments')
 
 
 def create_roles():
@@ -145,8 +157,7 @@ def create_roles():
 def create_users():
     ## Create an Admin
     admin_email = "admin@test.de"
-    admin = User(id=0, username=admin_email, password=generate_password_hash("test"), email=admin_email, role=0,
-                 date_of_birth=datetime.datetime(1995, 1, 31))
+    admin = User(id=0, username=admin_email, password=generate_password_hash("test"), email=admin_email, role=0, date_of_birth=datetime.datetime(1995, 1, 31))
     admin.save()
     click.echo('Admin user with username testmail@test.de and password test created')
 
