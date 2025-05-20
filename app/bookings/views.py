@@ -14,8 +14,9 @@ def home():
 
     for appointment in appointments:
 
-        new_row = {'Kursname': f'{appointment.course}', 'Termin': f'{appointment.date}', 'Kursleiter' : f'{appointment.teacher}'
-                  , 'Freie_Plaetze': f'{appointment.max_students - len(appointment.students)}', 'Raum': f'{appointment.room}'}
+        new_row = {'Kursname': f'{appointment.course.name}', 'Termin': f'{appointment.date}', 'Kursleiter' : f'{appointment.teacher.username}'
+                  , 'Freie_Plaetze': f'{appointment.max_students - len(appointment.students)}', 'Raum': f'{appointment.room.name}','Detailbeschreibung':
+                       f'{appointment.course.description}'}
         table_data.append(new_row)
 
 
