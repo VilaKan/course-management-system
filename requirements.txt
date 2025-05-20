@@ -9,3 +9,4 @@ Flask-WTF
 cssmin
 jsmin
 pytest
+matplotlib

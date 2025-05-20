@@ -66,7 +66,7 @@
         <div class="col-sm-2 sidenav">
             <p><a href="#">Link 1</a></p>
             <p><a href="#">Link 2</a></p>
-            <p><a href="#">Link 3</a></p>
+            <p><a href="{{ url_for('statistics.home') }}">Statistics</a></p>
         </div>
         <div class="col-sm-8 text-start">
             <div class="container">
@@ -87,10 +87,10 @@
             </div>
         </div>
     </div>
-
+    <!---
     <footer id="footer" class="container-fluid">
         <p>Copyright 2025</p>
-    </footer>
+    </footer>--->
 
     {% assets "common_js" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>

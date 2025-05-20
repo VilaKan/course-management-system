@@ -85,11 +85,13 @@ def load_blueprints(app):
     from app.users.views import bp_users
     from app.main.views import bp_main
     from app.books.views import bp_books
+    from app.statistics.views import bp_statistics
 
     # register blueprints
     app.register_blueprint(bp_main)
     app.register_blueprint(bp_users, url_prefix='/users')
     app.register_blueprint(bp_books, url_prefix='/books')
+    app.register_blueprint(bp_statistics, url_prefix='/statistics')
 
 
 
@@ -105,29 +107,47 @@ def init_db_command():
     create_rooms()
 
 def create_rooms():
-    room_one = Room(id=0, name="Coding Lab")
-    room_one.save()
-
-    room_two = Room(id=1, name="Cooking Lab")
-    room_two.save()
-
-    click.echo('Created 2 courses')
+    for i in range(0, 20):
+        room = Room(
+            id=i,
+            name=f"Room {i}",
+        )
+        room.save()
+        click.echo(f'Created Room{i}')
 
 def create_courses():
-    course_one = Course(id=0, name="Programming for Beginners", description="A beginner course for everyone to learn coding!")
-    course_one.save()
-
-    course_two = Course(id=1, name="Cooking for Beginners", description="A beginner course for everyone to learn cooking!")
-    course_two.save()
-
-    click.echo('Created 2 courses')
+    for i in range(0, 20):
+        course = Course(
+            id=i,
+            name=f"Course {i}",
+            description=f"Course {i} description"
+        )
+        course.save()
+        click.echo(f'Created course {i}')
 
 def create_appointments():
     ## Create Appointment
-    appointment = Appointment(id=0, date=datetime.datetime(1995, 1, 31), max_students=12, course=0,room=0,teacher=1, students=[2,3])
-    appointment.save()
-    click.echo('Created Appointment')
-
+    appointment_one = Appointment(id=0, date=datetime.datetime(2025, 1, 1), max_students=12, course=0,room=0,teacher=1, students=[0,1,2,3,4,5,6,7,8,9])
+    appointment_two = Appointment(id=1, date=datetime.datetime(2025, 1, 2), max_students=12, course=1,room=0,teacher=1, students=[0,1,2,3,4,5,6,7,8])
+    appointment_three = Appointment(id=2, date=datetime.datetime(2025, 1, 3), max_students=12, course=2,room=0,teacher=1, students=[0,1,2,3,4,5,6,7])
+    appointment_four = Appointment(id=3, date=datetime.datetime(2025, 1, 4), max_students=12, course=3,room=0,teacher=1, students=[0,1,2,3,4,5,6])
+    appointment_five = Appointment(id=4, date=datetime.datetime(2025, 1, 5), max_students=12, course=4,room=0,teacher=1, students=[0,1,2,3,4,5])
+    appointment_six = Appointment(id=5, date=datetime.datetime(2025, 1, 6), max_students=12, course=5,room=0,teacher=1, students=[0,1,2,3,4])
+    appointment_seven = Appointment(id=6, date=datetime.datetime(2025, 1, 7), max_students=12, course=6,room=0,teacher=1, students=[0,1,2,3])
+    appointment_eight = Appointment(id=7, date=datetime.datetime(2025, 1, 8), max_students=12, course=7,room=0,teacher=1, students=[0,1,2])
+    appointment_nine = Appointment(id=8, date=datetime.datetime(2025, 1, 9), max_students=12, course=8,room=0,teacher=1, students=[0,1])
+    appointment_ten = Appointment(id=9, date=datetime.datetime(2025, 1, 10), max_students=12, course=9,room=0,teacher=1, students=[0])
+    appointment_one.save()
+    appointment_two.save()
+    appointment_three.save()
+    appointment_four.save()
+    appointment_five.save()
+    appointment_six.save()
+    appointment_seven.save()
+    appointment_eight.save()
+    appointment_nine.save()
+    appointment_ten.save()
+    click.echo('Created Appointments')
 
 def create_roles():
     ## Create Roles
@@ -143,8 +163,7 @@ def create_roles():
 def create_users():
     ## Create an Admin
     admin_email = "admin@test.de"
-    admin = User(id=0, username=admin_email, password=generate_password_hash("test"), email=admin_email, role=0,
-                 date_of_birth=datetime.datetime(1995, 1, 31))
+    admin = User(id=0, username=admin_email, password=generate_password_hash("test"), email=admin_email, role=0, date_of_birth=datetime.datetime(1995, 1, 31))
     admin.save()
     click.echo('Admin user with username testmail@test.de and password test created')
 
@@ -155,16 +174,15 @@ def create_users():
     teacher.save()
     click.echo('Teacher user with username teacher@test.de and password test created')
 
-    ## Create an Student
-    student_one_email = "student_one@test.de"
-    student_one = User(id=2, username=student_one_email, password=generate_password_hash("test"), email=student_one_email, role=2,
-                       date_of_birth=datetime.datetime(1995, 1, 31))
-    student_one.save()
-    click.echo('Student user with username student_one@test.de and password test created')
-
-    ## Create an Student
-    student_two_email = "student_two@test.de"
-    student_two = User(id=3, username=student_two_email, password=generate_password_hash("test"), email=student_two_email, role=2,
-                       date_of_birth=datetime.datetime(2025, 1, 31))
-    student_two.save()
-    click.echo('Student user with username student_two@test.de and password test created')
+    for i in range(0, 11):
+        email = f"student{i}@test.de"
+        student = User(
+            id=i,
+            username=email,
+            password=generate_password_hash("test"),
+            email=email,
+            role=2,
+            date_of_birth=datetime.datetime(1995, 1, 31)
+        )
+        student.save()
+        click.echo(f'Student user with username {email} and password test created')
