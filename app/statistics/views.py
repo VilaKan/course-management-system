@@ -121,5 +121,3 @@ def generate_year_only():
     plt.tight_layout()
     plt.savefig("static/plots/appointments_bars.png", dpi=300, bbox_inches='tight')
     return render_template('statistics.html', info=session)
-
-    return render_template('statistics.html', info=session)
