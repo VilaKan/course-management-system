@@ -1,8 +1,4 @@
-from flask_mongoengine import MongoEngine
-
-db = MongoEngine()
-
-
+from app.database import db
 
 class Book(db.Document):
     title = db.StringField(max_length=80, required=True)

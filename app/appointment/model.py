@@ -1,12 +1,12 @@
-﻿from flask_mongoengine import MongoEngine
+﻿from app.database import db
+from mongoengine.fields import ReferenceField, ListField
+from mongoengine import NULLIFY
 
-db = MongoEngine()
 
 class Appointment(db.Document):
-    id = db.IntField(required=True, primary_key=True)
     date = db.DateField(required=True)
     max_students = db.IntField(required=True)
-    course = db.IntField(required=True)
-    room = db.IntField(required=True)
-    teacher = db.IntField(required=True)
-    students = db.ListField(required=True)
+    course = ReferenceField("Course", reverse_delete_rule=NULLIFY, required=True)
+    room = ReferenceField("Room", required=True, reverse_delete_rule=NULLIFY)
+    teacher = ReferenceField("User", required=True, reverse_delete_rule=NULLIFY)
+    students = ListField(ReferenceField("User", reverse_delete_rule=NULLIFY), required=True)
