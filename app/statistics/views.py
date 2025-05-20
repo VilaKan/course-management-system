@@ -104,8 +104,7 @@ def generate_year_only():
     courses = []
     students = []
     for appointment in appointments:
-        course = Course.objects.get(id=appointment.course)
-        courses.append(course.name)
+        courses.append(appointment.course.name)
         students.append(len(appointment.students))
 
 
