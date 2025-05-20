@@ -4,7 +4,7 @@ import click
 from flask import Flask
 from flask.cli import with_appcontext
 from flask_assets import Environment
-from flask_mongoengine import MongoEngine
+from app.database import db
 from flask_login import LoginManager
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_session.mongodb import MongoDBSessionInterface
@@ -14,13 +14,14 @@ from webassets.loaders import PythonLoader as PythonAssetsLoader
 from werkzeug.security import generate_password_hash
 
 from app import assets
-from app.appointment.model import Appointment
 from app.course.model import Course
-from app.users.models import User
 from app.role.model import Role
+from app.users.models import User
 from app.room.model import Room
+from app.appointment.model import Appointment
 
 assets_env = Environment()
+
 
 
 def create_app(config=None):
@@ -37,7 +38,6 @@ def create_app(config=None):
     app.config.from_object(config)
 
     # set up database
-    db = MongoEngine()
     db.init_app(app)
 
     # use mongo engine for session store
@@ -100,16 +100,15 @@ def load_blueprints(app):
 @click.command('init-db')
 @with_appcontext
 def init_db_command():
-    create_users()
-    create_roles()
-    create_appointments()
-    create_courses()
     create_rooms()
+    create_roles()
+    create_users()
+    create_courses()
+    create_appointments()
 
 def create_rooms():
     for i in range(0, 20):
         room = Room(
-            id=i,
             name=f"Room {i}",
         )
         room.save()
@@ -118,42 +117,32 @@ def create_rooms():
 def create_courses():
     for i in range(0, 20):
         course = Course(
-            id=i,
             name=f"Course {i}",
             description=f"Course {i} description"
         )
         course.save()
         click.echo(f'Created course {i}')
 
+
 def create_appointments():
-    ## Create Appointment
-    appointment_one = Appointment(id=0, date=datetime.datetime(2025, 1, 1), max_students=12, course=0,room=0,teacher=1, students=[0,1,2,3,4,5,6,7,8,9])
-    appointment_two = Appointment(id=1, date=datetime.datetime(2025, 1, 2), max_students=12, course=1,room=0,teacher=1, students=[0,1,2,3,4,5,6,7,8])
-    appointment_three = Appointment(id=2, date=datetime.datetime(2025, 1, 3), max_students=12, course=2,room=0,teacher=1, students=[0,1,2,3,4,5,6,7])
-    appointment_four = Appointment(id=3, date=datetime.datetime(2025, 1, 4), max_students=12, course=3,room=0,teacher=1, students=[0,1,2,3,4,5,6])
-    appointment_five = Appointment(id=4, date=datetime.datetime(2025, 1, 5), max_students=12, course=4,room=0,teacher=1, students=[0,1,2,3,4,5])
-    appointment_six = Appointment(id=5, date=datetime.datetime(2025, 1, 6), max_students=12, course=5,room=0,teacher=1, students=[0,1,2,3,4])
-    appointment_seven = Appointment(id=6, date=datetime.datetime(2025, 1, 7), max_students=12, course=6,room=0,teacher=1, students=[0,1,2,3])
-    appointment_eight = Appointment(id=7, date=datetime.datetime(2025, 1, 8), max_students=12, course=7,room=0,teacher=1, students=[0,1,2])
-    appointment_nine = Appointment(id=8, date=datetime.datetime(2025, 1, 9), max_students=12, course=8,room=0,teacher=1, students=[0,1])
-    appointment_ten = Appointment(id=9, date=datetime.datetime(2025, 1, 10), max_students=12, course=9,room=0,teacher=1, students=[0])
-    appointment_one.save()
-    appointment_two.save()
-    appointment_three.save()
-    appointment_four.save()
-    appointment_five.save()
-    appointment_six.save()
-    appointment_seven.save()
-    appointment_eight.save()
-    appointment_nine.save()
-    appointment_ten.save()
+    rooms = Room.objects.all()
+    courses = Course.objects.all()
+    teacher_role = Role.objects.filter(name="Teacher").first()
+    user_role = Role.objects.filter(name="User").first()
+    teacher = User.objects.filter(role=teacher_role).first()
+    users = User.objects.filter(role=user_role)
+
+    for i in range(10):
+        appointment = Appointment(date=datetime.datetime(2025, 1, 1), max_students=12, course=courses[i], room=rooms[i], teacher=teacher, students=users[0:i+1])
+        appointment.save()
+
     click.echo('Created Appointments')
 
 def create_roles():
     ## Create Roles
-    role_admin = Role(id=0, name="Admin")
-    role_teacher = Role(id=1, name="Teacher")
-    role_user = Role(id=2, name="User")
+    role_admin = Role(name="Admin")
+    role_teacher = Role(name="Teacher")
+    role_user = Role(name="User")
 
     role_admin.save()
     role_teacher.save()
@@ -161,15 +150,18 @@ def create_roles():
     click.echo('Created Roles "Admin" and "Teacher" and "User"')
 
 def create_users():
+    admin_role = Role.objects.filter(name="Admin").first()
+    teacher_role = Role.objects.filter(name="Teacher").first()
+    user_role = Role.objects.filter(name="User").first()
     ## Create an Admin
     admin_email = "admin@test.de"
-    admin = User(id=0, username=admin_email, password=generate_password_hash("test"), email=admin_email, role=0, date_of_birth=datetime.datetime(1995, 1, 31))
+    admin = User(username=admin_email, password=generate_password_hash("test"), email=admin_email, role=admin_role, date_of_birth=datetime.datetime(1995, 1, 31))
     admin.save()
     click.echo('Admin user with username testmail@test.de and password test created')
 
     ## Create a Teacher
     teacher_email = "teacher@test.de"
-    teacher = User(id=1, username=teacher_email, password=generate_password_hash("test"), email=teacher_email, role=1,
+    teacher = User(username=teacher_email, password=generate_password_hash("test"), email=teacher_email, role=teacher_role,
                    date_of_birth=datetime.datetime(1995, 1, 31))
     teacher.save()
     click.echo('Teacher user with username teacher@test.de and password test created')
@@ -177,11 +169,10 @@ def create_users():
     for i in range(0, 11):
         email = f"student{i}@test.de"
         student = User(
-            id=i,
             username=email,
             password=generate_password_hash("test"),
             email=email,
-            role=2,
+            role=user_role,
             date_of_birth=datetime.datetime(1995, 1, 31)
         )
         student.save()

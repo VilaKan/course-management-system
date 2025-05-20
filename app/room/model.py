@@ -1,7 +1,4 @@
-﻿from flask_mongoengine import MongoEngine
-
-db = MongoEngine()
+﻿from app.database import db
 
 class Room(db.Document):
-    id = db.IntField(required=True, primary_key=True)
     name = db.StringField(required=True)
