@@ -10,7 +10,15 @@ bp_bookings = Blueprint('bookings', __name__, template_folder='pages')
 def home():
     appointments = Appointment.objects.all()
 
-    for appointment in appointments:
-        free_spots = appointment.max_students - len(appointment.students)
+    table_data = []
 
-    return render_template('bookings.html', info=session)
+    for appointment in appointments:
+
+        new_row = {'Kursname': f'{appointment.course}', 'Termin': f'{appointment.date}', 'Kursleiter' : f'{appointment.teacher}'
+                  , 'Freie_Plaetze': f'{appointment.max_students - len(appointment.students)}', 'Raum': f'{appointment.room}'}
+        table_data.append(new_row)
+
+
+    return render_template('bookings.html', info=session, table_data=table_data)
+
+

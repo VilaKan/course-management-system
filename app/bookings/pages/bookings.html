@@ -3,5 +3,29 @@
 {% block title %}Belegung{% endblock %}
 
 {% block body %}
- <h1>Belegung</h1>
+<h1>Terminübersicht</h1>
+<table class="appointment-table">
+    <thead>
+        <tr>
+            <th>Kursname</th>
+            <th>Termin</th>
+            <th>Kursleiter</th>
+            <th>Freie Plaetze</th>
+            <th>Raum</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in table_data %}
+        <tr>
+            <td>{{ data.Kursname }}</td>
+            <td>{{ data.Termin }}</td>
+            <td>{{ data.Kursleiter }}</td>
+            <td>{{ data.Freie_Plaetze }}</td>
+            <td>{{ data.Raum}}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
