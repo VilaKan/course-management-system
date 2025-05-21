@@ -3,8 +3,8 @@
 {% block title %}Belegung{% endblock %}
 
 {% block body %}
-<h1>Terminübersicht</h1>
-<table class="appointment-table">
+<h1 style="text-align: center;">Terminübersicht</h1>
+<table class="table table-hover">
     <thead>
         <tr>
             <th>Kursname</th>
@@ -18,13 +18,13 @@
     </thead>
     <tbody>
         {% for data in table_data %}
-        <tr>
+         <tr onclick="window.location.href='{{ url_for('bookings.clicked_course', course_id=data.id) }}'" style="cursor:pointer;">
             <td>{{ data.Kursname }}</td>
             <td>{{ data.Termin }}</td>
             <td>{{ data.Kursleiter }}</td>
             <td>{{ data.Freie_Plaetze }}</td>
             <td>{{ data.Raum}}</td>
-            <td><a href='#'>Detailansicht</a></td>
+            <td>Detailansicht</td>
 
         </tr>
         {% endfor %}
