@@ -19,6 +19,8 @@ from app.role.model import Role
 from app.users.models import User
 from app.room.model import Room
 from app.appointment.model import Appointment
+from app.course_management.views import bp_course_list
+
 
 assets_env = Environment()
 
@@ -92,9 +94,7 @@ def load_blueprints(app):
     app.register_blueprint(bp_users, url_prefix='/users')
     app.register_blueprint(bp_books, url_prefix='/books')
     app.register_blueprint(bp_statistics, url_prefix='/statistics')
-
-
-
+    app.register_blueprint(bp_course_list, url_prefix='/course_list')
 
 
 @click.command('init-db')
