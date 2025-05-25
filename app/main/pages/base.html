@@ -50,7 +50,7 @@
         <div class="col-sm-2 sidenav">
             {% if current_user.role.name in ['User', 'Teacher', 'Admin'] %}
             <h2>Nutzerbereich:</h2>
-            <p class="h5"><a href="{{ url_for('bookings.home') }}">Belegung</a></p>
+            <p class="h5"><a href="{{ url_for('bookings.home') }}">Terminübersicht</a></p>
             {% endif %}
             {% if current_user.role.name in ['Teacher', 'Admin'] %}
             <h2>Dozentenbereich:</h2>

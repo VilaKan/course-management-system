@@ -1,5 +1,5 @@
-from flask import Flask, render_template, Blueprint, session
-from flask_login import login_required
+from flask import Flask, render_template, Blueprint, session, redirect, url_for, flash
+from flask_login import login_required, current_user
 from app.appointment.model import Appointment
 from datetime import datetime
 from bson import ObjectId
@@ -14,24 +14,54 @@ def home():
     table_data = []
 
     for appointment in appointments:
-        if appointment.date < datetime.now().date() or appointment.students==appointment.max_students :              #Termine aus der Vergangenheit ausblenden
+        if appointment.date < datetime.now().date() :
+            continue
+
+        if len(appointment.students)==appointment.max_students :              #Termine aus der Vergangenheit ausblenden
+            continue
+
+        if current_user in appointment.students :
             continue
 
         new_row = {'id': str(appointment.course.id),'Kursname': f'{appointment.course.name}', 'Termin': f'{appointment.date}', 'Kursleiter' : f'{appointment.teacher.username}'
-                  , 'Freie_Plaetze': f'{appointment.max_students - len(appointment.students)}', 'Raum': f'{appointment.room.name}'}
+                  , 'Freie_Plaetze': f'{appointment.max_students - len(appointment.students)}','Max_studenten': f'{appointment.max_students}', 'Raum': f'{appointment.room.name}',}
         table_data.append(new_row)
-
-
     return render_template('bookings.html', info=session, table_data=table_data)
 
 
 @bp_bookings.route('/course/<string:course_id>')
 @login_required
 def clicked_course(course_id):
-    appointment = Appointment.objects(course=ObjectId(course_id), date__gte=datetime.today()).first()
+    appointment = Appointment.objects(course=ObjectId(course_id), date__gte=datetime.now()).first()
+
+    if not appointment:
+        return redirect(url_for('bookings.home'))
+    return render_template('clicked_course.html', appointment=appointment, appointment_id=appointment.id)
 
 
-    return render_template('clicked_course.html', appointment=appointment)
+@bp_bookings.route('/booked_course/<string:appointment_id>', methods=['POST'])
+
+def booked_course(appointment_id):
+    appointment = Appointment.objects(id=ObjectId(appointment_id)).first()
+
+    if len(appointment.students) == appointment.max_students:
+        flash("Der Kurs wurde soeben von einem anderen Nutzer belegt worden", 'error')
+        return redirect(url_for('bookings.home'))
+
+    if current_user in appointment.students:
+        return redirect(url_for('bookings.home'))
+
+    #selben Lehrer am selben Termindatum nicht möglich
+    if appointment.date and appointment.teacher ==True:
+        flash("Selben Kursleiter am selben Termindatum nicht möglich?", 'error')
+        return redirect(url_for('bookings.clicked_course', appointment_id=appointment.id))
+
+    appointment.students.append(current_user)
+    appointment.save()
+    flash("Kurs wurde erfolgreich belegt", 'success')
+    return redirect(url_for('bookings.home'))
+
+
 
 
 
