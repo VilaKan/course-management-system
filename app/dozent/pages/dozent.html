@@ -4,5 +4,29 @@
 
 {% block body %}
   <h1>Dozentenverwaltung</h1>
-  <p>Willkommen bei der Dozentenverwaltung.</p>
+
+  <table class="table">
+  <thead>
+    <tr>
+      <th>Datum</th>
+      <th>Kurs</th>
+      <th>Raum</th>
+      <th>Teilnehmeranzahl</th>
+      <th>Aktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for termin in termine %}
+    <tr>
+      <td>{{ termin.date }}</td>
+      <td>{{ termin.kurs }}</td>
+      <td>{{ termin.raum }}</td>
+      <td>{{ termin.anzahl }}</td>
+      <td>
+        <button class="btn btn-primary">Teilnehmerliste erstellen</button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
