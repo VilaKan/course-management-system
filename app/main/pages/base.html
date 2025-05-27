@@ -51,6 +51,9 @@
             {% if current_user.role.name in ['User', 'Teacher', 'Admin'] %}
             <h2>Nutzerbereich:</h2>
             <p class="h5"><a href="{{ url_for('bookings.home') }}">Terminübersicht</a></p>
+            <p class="h5"><a href="{{ url_for('bookings.my_courses') }}">Meine Kurse</a></p>
+
+
             {% endif %}
             {% if current_user.role.name in ['Teacher', 'Admin'] %}
             <h2>Dozentenbereich:</h2>
