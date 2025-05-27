@@ -19,8 +19,12 @@
         <tr>
           <td>{{ course.name }}</td>
           <td>{{ course.description }}</td>
-          <td><a href="#">⚙️</a></td>
-          <td><a href="#">📅</a></td>
+          <td>
+            <a href="{{ url_for('course_list.edit_course', course_id=course.id) }}">⚙️</a>
+          </td>
+          <td>
+            <a href="#">📅</a> <!-- das wird ein link zu einem anderen usecase -->
+          </td>
         </tr>
         {% endfor %}
       </tbody>
