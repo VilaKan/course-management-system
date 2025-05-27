@@ -1,66 +1,61 @@
 {% extends "base.html" %}
 
-{% block title %}Kursübersicht{% endblock %}
+{% block title %}Kursliste{% endblock %}
 
 {% block body %}
-<h1>Kursübersicht</h1>
+<h1>Kursliste</h1>
 
-<!-- Filterbereich -->
-<div style="margin-bottom: 20px;">
-  <label for="nameFilter">Kursname:</label>
-  <input type="text" id="nameFilter" placeholder="z. B. Datenbanken">
+{% if courses %}
+  <!-- Filterfeld -->
+  <input type="text" id="courseSearch" class="form-control mb-3" placeholder="Kursname oder Beschreibung filtern...">
 
-  <label for="descFilter" style="margin-left: 15px;">Beschreibung:</label>
-  <input type="text" id="descFilter" placeholder="z. B. Einführung">
+  <div style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc;">
+    <table id="courseTable" style="width: 100%; border-collapse: collapse;">
+      <thead style="position: sticky; top: 0; background-color: #f9f9f9;">
+        <tr>
+          <th style="border: 1px solid #ccc; padding: 8px;">Kursname</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Beschreibung</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+        <tr>
+          <td style="border: 1px solid #ccc; padding: 8px;">{{ course.name }}</td>
+          <td style="border: 1px solid #ccc; padding: 8px;">{{ course.description }}</td>
+          <td style="border: 1px solid #ccc; padding: 8px;">
+            <a href="{{ url_for('course_list.edit_course', course_id=course.id) }}">🛠️</a>
+            <a href="#" style="margin-left: 10px;">📅</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p>Noch keine Kurse vorhanden.</p>
+{% endif %}
 
-  <button onclick="filterTable()" style="margin-left: 15px;">Filtern</button>
-  <button onclick="resetFilter()" style="margin-left: 5px;">Zurücksetzen</button>
+<!-- Kurs hinzufügen Button -->
+<div style="margin-top: 20px;">
+  <a href="{{ url_for('course_list.create_course') }}" class="btn btn-primary">+ Kurs anlegen</a>
 </div>
 
-<!-- Scrollbarer Tabellencontainer -->
-<div style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc;">
-  <table id="courseTable" style="width: 100%; border-collapse: collapse;">
-    <thead style="position: sticky; top: 0; background-color: #f9f9f9;">
-      <tr>
-        <th style="border: 1px solid #ccc; padding: 8px;">Kursname</th>
-        <th style="border: 1px solid #ccc; padding: 8px;">Beschreibung</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for course in courses %}
-      <tr>
-        <td style="border: 1px solid #ccc; padding: 8px;">{{ course.name }}</td>
-        <td style="border: 1px solid #ccc; padding: 8px;">{{ course.description }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-<!-- JavaScript-Filterfunktion -->
+<!-- JS für Filter -->
 <script>
-function filterTable() {
-  const nameInput = document.getElementById("nameFilter").value.toLowerCase();
-  const descInput = document.getElementById("descFilter").value.toLowerCase();
-  const table = document.getElementById("courseTable");
-  const rows = table.getElementsByTagName("tr");
+document.getElementById('courseSearch').addEventListener('keyup', function () {
+  const filter = this.value.toLowerCase();
+  const rows = document.querySelectorAll('#courseTable tbody tr');
 
-  for (let i = 1; i < rows.length; i++) {
-    const nameCell = rows[i].cells[0].textContent.toLowerCase();
-    const descCell = rows[i].cells[1].textContent.toLowerCase();
-
-    const nameMatch = nameCell.includes(nameInput);
-    const descMatch = descCell.includes(descInput);
-
-    rows[i].style.display = (nameMatch && descMatch) ? "" : "none";
-  }
-}
-
-function resetFilter() {
-  document.getElementById("nameFilter").value = "";
-  document.getElementById("descFilter").value = "";
-  filterTable();
-}
+  rows.forEach(row => {
+    const name = row.children[0].textContent.toLowerCase();
+    const description = row.children[1].textContent.toLowerCase();
+    if (name.includes(filter) || description.includes(filter)) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+});
 </script>
 {% endblock %}
-
