@@ -1,5 +1,7 @@
 from flask import Flask, render_template, Blueprint, session, redirect, url_for, flash, send_file
 from flask_login import login_required, current_user
+
+from app import appointment
 from app.appointment.model import Appointment
 from datetime import datetime
 from bson import ObjectId
@@ -7,9 +9,6 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from io import BytesIO
 from textwrap import wrap
-
-
-
 
 
 
@@ -31,12 +30,11 @@ def home():
         if appointment.date < datetime.now().date() :
             continue
 
-        if len(appointment.students)==appointment.max_students :              #Termine aus der Vergangenheit ausblenden
+        if len(appointment.students)==appointment.max_students :
             continue
 
         if current_user in appointment.students :
             continue
-
 
         new_row = {'id': str(appointment.course.id),
                    'Kursname': f'{appointment.course.name}',
@@ -56,10 +54,9 @@ def home():
 @bp_bookings.route('/course/<string:course_id>')
 @login_required
 def clicked_course(course_id):
-    appointment = Appointment.objects(course=ObjectId(course_id), date__gte=datetime.now()).first()
+    appointment = Appointment.objects(course=ObjectId(course_id)).first()
 
-    if not appointment:
-        return redirect(url_for('bookings.home'))
+
     return render_template('clicked_course.html', appointment=appointment, appointment_id=appointment.id)
 
 
@@ -76,7 +73,6 @@ def booked_course(appointment_id):
     if len(appointment.students) == appointment.max_students:
         flash("Der Kurs wurde soeben von einem anderen Nutzer belegt worden", 'danger')
         return redirect(url_for('bookings.home'))
-
 
     #selben Lehrer am selben Termindatum nicht möglich
     if exestiert_bereits:
@@ -135,7 +131,7 @@ def logout_courses(appointment_id):
     if current_user not in kurse.students :
         return redirect(url_for('bookings.my_courses'))
 
-    if kurse.date <= datetime.now().date():
+    if kurse.date < datetime.now().date():
         flash("Warnung: Abmeldung am Kurstag nicht mehr möglich", 'danger')
         return redirect(url_for('bookings.my_courses'))
 
@@ -150,6 +146,10 @@ def logout_courses(appointment_id):
 @login_required
 def confirmed_participant_pdf(appointment_id):
     appointments = Appointment.objects(id=ObjectId(appointment_id)).first()
+
+    if appointments.date >= datetime.now().date():
+        flash("Teilnahmenachweis erst nach Kurstermin möglich, bitte versuche es erneut sobald der Kurs abgeschlossen ist",'danger')
+    return redirect(url_for('bookings.my_clicked_courses', appointment_id=appointments.id))
 
     buffer= BytesIO()
     p = canvas.Canvas(buffer, pagesize=A4)
