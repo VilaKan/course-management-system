@@ -1,15 +1,36 @@
-{% extends "base.html" %}
-
-{% block title %}Kursübersicht{% endblock %}
+{% extends 'base.html' %}
 
 {% block body %}
-<h1>Kursübersicht</h1>
-<p>Willkommen in der Kursverwaltung. Hier kannst du alle Kurse einsehen und verwalten.</p>
+<div class="container" style="padding: 2rem;">
+  <h2>Kursverwaltung</h2>
 
-<!-- Beispielhafte Kursliste -->
-<ul>
-  <li>Mathematik 1</li>
-  <li>Informatik Grundlagen</li>
-  <li>Datenbanken</li>
-</ul>
+  {% if courses %}
+    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%;">
+      <thead>
+        <tr>
+          <th>Kursname</th>
+          <th>Beschreibung</th>
+          <th>Einstellungen</th>
+          <th>Termine</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+        <tr>
+          <td>{{ course.name }}</td>
+          <td>{{ course.description }}</td>
+          <td><a href="#">⚙️</a></td>
+          <td><a href="#">📅</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Es existieren aktuell keine Kurse.</p>
+  {% endif %}
+
+  <div style="margin-top: 2rem;">
+    <a href="{{ url_for('course_list.create_course') }}" class="btn btn-primary">➕ Neuen Kurs anlegen</a>
+  </div>
+</div>
 {% endblock %}
