@@ -12,7 +12,7 @@ def testapp():
     client = app.test_client()
 
     # add admin account
-    admin = User(username="admin", password=generate_password_hash("test"))
+    admin = User(username="admin@test.de", password=generate_password_hash("test"))
     admin.save()
 
     # clear data base

@@ -10,7 +10,7 @@ def testapp(request):
     app = create_app('app.config.TestingConfig')
     client = app.test_client()
 
-    admin = User(username="admin", password=generate_password_hash("test"))
+    admin = User(username="admin@test.de", password=generate_password_hash("test"))
     admin.save()
 
     return client
