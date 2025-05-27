@@ -147,23 +147,29 @@ def logout_courses(appointment_id):
 def confirmed_participant_pdf(appointment_id):
     appointments = Appointment.objects(id=ObjectId(appointment_id)).first()
 
-    if appointments.date >= datetime.now().date():
+    if appointments.date > datetime.now().date():
         flash("Teilnahmenachweis erst nach Kurstermin möglich, bitte versuche es erneut sobald der Kurs abgeschlossen ist",'danger')
-    return redirect(url_for('bookings.my_clicked_courses', appointment_id=appointments.id))
+        return redirect(url_for('bookings.my_clicked_courses', appointment_id=appointments.id))
+
 
     buffer= BytesIO()
     p = canvas.Canvas(buffer, pagesize=A4)
 
     width, height = A4
-    y=height-60
+    y= height- 60
+
 
     #text
+    text= f"Dies ist eine offizielle Bestätigung, dass {current_user.username} am {appointments.date} erfolgreich am Kurs {appointments.course.name} teilgenommen hat. Der Kurs wurde von {appointments.teacher.username} geleitet und fand im Raum {appointments.room.name} statt"
     p.setFont("Helvetica-Bold", 15)
-    p.drawString(50,y, f"Dies ist eine offizielle Bestätigung, dass {current_user.username} am {appointments.date} erfolgreich am Kurs {appointments.course.name} teilgenommen hat. Der Kurs wurde von {appointments.teacher.username} geleitet und fand im Raum {appointments.room.name} statt")
+    wrapped_lines= wrap(text,width=70)
+
+    for line in wrapped_lines:
+        p.drawString(50, y, line)
+        y -= 25
 
     p.showPage()
     p.save()
-
     buffer.seek(0)
     return send_file(buffer,mimetype='application/pdf', download_name='teilnahmebestätigung.pdf',as_attachment=True)
 
