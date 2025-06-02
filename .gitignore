@@ -4,3 +4,4 @@ venv
 .vscode
 .idea
 /tests/statistics/static/
+/tests/main/static/
