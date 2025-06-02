@@ -1,5 +1,7 @@
 #! ../env/bin/python
 # -*- coding: utf-8 -*-
+from tests.conftest import login_as_admin, testapp
+
 
 class TestURLs:
     def test_statistics_home(self, testapp):
@@ -7,10 +9,7 @@ class TestURLs:
         assert rv.status_code == 308
 
     def test_statistics_home_logged_in(self, testapp):
-        rv = testapp.post('/login', data=dict(
-            username='admin@test.de',
-            password="test"
-        ), follow_redirects=True)
+        rv = login_as_admin(testapp)
 
-        rv = testapp.get('/books/')
+        rv = testapp.get('/statistics/')
         assert 200 == rv.status_code

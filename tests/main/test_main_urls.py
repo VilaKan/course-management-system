@@ -36,7 +36,7 @@ class TestURLs:
         """
 
         rv = testapp.post('/login', data=dict(
-            username='admin',
+            username='admin@test.de',
             password="test"
         ), follow_redirects=True)
 
