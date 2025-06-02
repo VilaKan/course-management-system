@@ -1,5 +1,6 @@
 #! ../env/bin/python
 # -*- coding: utf-8 -*-
+from tests.conftest import testapp, login_as_admin
 
 create_user = True
 
@@ -35,10 +36,7 @@ class TestURLs:
             if the user is logged in
         """
 
-        rv = testapp.post('/login', data=dict(
-            username='admin@test.de',
-            password="test"
-        ), follow_redirects=True)
+        login_as_admin(testapp)
 
         rv = testapp.get('/restricted')
         assert rv.status_code == 200
