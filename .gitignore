@@ -3,3 +3,4 @@ venv
 *cache
 .vscode
 .idea
+/tests/statistics/static/
