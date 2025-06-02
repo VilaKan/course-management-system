@@ -41,7 +41,7 @@ def login_as_teacher(testapp):
 
 def login_as_student(testapp):
     rv = testapp.post('/login', data=dict(
-        username='student@test.de',
+        username='student0@test.de',
         password="test"
     ), follow_redirects=True)
 
