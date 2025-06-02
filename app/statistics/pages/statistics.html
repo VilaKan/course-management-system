@@ -7,7 +7,7 @@
 <h2>Anzahl der Kurse pro Wochentag</h2>
     <form action="{{ url_for('statistics.generate_year_and_month') }}" method="POST" style="display: block;">
         <label for="monthSelect">Monat:</label>
-        <select id="monthSelect" name="monthSelect">
+        <select id="monthSelect" name="monthSelect",>
           <option value="01">Januar</option>
           <option value="02">Februar</option>
           <option value="03">März</option>
@@ -34,7 +34,12 @@
           style="width: 80px;">
         <button type="submit" style="margin-left: 15px;">Generieren</button>
     </form>
-    <img src="{{ url_for('static', filename='plots/appointments_pie.png') }}" alt="Appointments Pie Chart" class="img-fluid mt-1" style="max-width: 600px; max-height: 600px;">
+    {% if yam_valid == true %}
+        <img src="{{ url_for('static', filename='plots/appointments_pie.png') }}" alt="Appointments Pie Chart" class="img-fluid mt-1" style="max-width: 600px; max-height: 600px;">
+    {% else %}
+        <br>
+        <p class="fw-bold">Keine Daten für den gewählten Zeitraum</p>
+    {% endif %}
 
 <h2>Teilnehmeranzahl pro Kurs</h2>
     <form action="{{ url_for('statistics.generate_year_only') }}" method="POST" style="display: block;">
@@ -49,5 +54,10 @@
         value="2025">
         <button type="submit" style="margin-left: 15px;">Generieren</button>
     </form>
-    <img src="{{ url_for('static', filename='plots/appointments_bars.png') }}" alt="Appointments Pie Chart" class="img-fluid mt-1" style="max-width: 600px; max-height: 600px;">
+    {% if year_only_valid == true %}
+        <img src="{{ url_for('static', filename='plots/appointments_bars.png') }}" alt="Appointments Pie Chart" class="img-fluid mt-1" style="max-width: 600px; max-height: 600px;">
+    {% else %}
+        <br>
+        <p class="fw-bold">Keine Daten für den gewählten Zeitraum</p>
+    {% endif %}
 {% endblock %}>
