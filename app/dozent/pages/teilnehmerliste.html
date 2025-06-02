@@ -9,6 +9,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th>Nr.</th>
         <th>Name</th>
         <th>E-Mail</th>
       </tr>
@@ -16,6 +17,7 @@
     <tbody>
       {% for student in students %}
       <tr>
+        <td>{{ loop.index }}</td>
         <td>{{ student.username }}</td>
         <td>{{ student.email }}</td>
       </tr>
@@ -28,3 +30,4 @@
   </div>
 {% endif %}
 {% endblock %}
+

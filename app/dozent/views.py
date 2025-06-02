@@ -43,9 +43,9 @@ def home():
 
     error_message = None
     if not terminliste:
-        if filter_applied and all_appointments:  # Filter active, but results empty
+        if filter_applied and all_appointments:
             error_message = "Keine Termine im gewählten Zeitraum gefunden."
-        elif not all_appointments:  # No appointments at all
+        elif not all_appointments:
             error_message = "Keine Termine gefunden."
 
     return render_template('dozent.html', termine=terminliste, info=session, error_message=error_message)
