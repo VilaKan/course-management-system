@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 from tests.conftest import testapp, login_as_admin
 
-create_user = True
-
 class TestURLs:
     def test_home(self, testapp):
         """ Tests if the home page loads """
