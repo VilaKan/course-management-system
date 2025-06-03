@@ -60,9 +60,11 @@ def create_app(config=None):
     login_manager.login_message_category = "warning"
     login_manager.init_app(app)
 
+
     @login_manager.user_loader
     def load_user(user_id):
-        return User.objects.get(pk=user_id)
+            return User.objects.get(pk=user_id)
+
 
     # import and register the different asset bundles
     assets_loader = PythonAssetsLoader(assets)

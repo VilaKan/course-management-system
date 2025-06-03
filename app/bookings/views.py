@@ -38,7 +38,7 @@ def home():
 
         new_row = {'id': str(appointment.course.id),
                    'Kursname': f'{appointment.course.name}',
-                   'Termin': f'{appointment.date}',
+                   'Termin': f'{appointment.date.strftime('%d.%m.%Y')}',
                    'Kursleiter' : f'{appointment.teacher.username}'
                   ,'Freie_Plaetze': f'{appointment.max_students - len(appointment.students)}',
                    'Max_studenten': f'{appointment.max_students}',
@@ -57,7 +57,7 @@ def clicked_course(course_id):
     appointment = Appointment.objects(course=ObjectId(course_id)).first()
 
 
-    return render_template('clicked_course.html', appointment=appointment, appointment_id=appointment.id)
+    return render_template('clicked_course.html', appointment=appointment, appointment_id=appointment.id, info=session)
 
 
 
@@ -68,16 +68,12 @@ def clicked_course(course_id):
 @bp_bookings.route('/booked_course/<string:appointment_id>', methods=['POST'])
 def booked_course(appointment_id):
     appointment = Appointment.objects(id=ObjectId(appointment_id)).first()
-    exestiert_bereits = Appointment.objects(date=appointment.date, teacher=appointment.teacher,students=current_user, id__ne=appointment.id).first()
 
     if len(appointment.students) == appointment.max_students:
         flash("Der Kurs wurde soeben von einem anderen Nutzer belegt worden", 'danger')
         return redirect(url_for('bookings.home'))
 
-    #selben Lehrer am selben Termindatum nicht möglich
-    if exestiert_bereits:
-        flash("Warnung : Selben Kursleiter am selben Termindatum nicht möglich", 'danger')
-        return redirect(url_for('bookings.home'))
+
 
     appointment.students.append(current_user)
     appointment.save()
@@ -172,6 +168,7 @@ def confirmed_participant_pdf(appointment_id):
     p.save()
     buffer.seek(0)
     return send_file(buffer,mimetype='application/pdf', download_name='teilnahmebestätigung.pdf',as_attachment=True)
+
 
 
 
