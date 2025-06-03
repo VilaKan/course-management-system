@@ -49,7 +49,7 @@ def home():
 
 
 
-#Benutzer sieht die Terminübersicht und wählt ein Termin seiner Wahl aus und wird weitergeleitet zu den
+# Benutzer sieht die Terminübersicht und wählt ein Termin seiner Wahl aus und wird weitergeleitet zu den
 # Inforrmationen und zu einem Button mit "Kurs belegen"
 @bp_bookings.route('/course/<string:course_id>')
 @login_required
