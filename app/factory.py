@@ -157,14 +157,14 @@ def create_users():
     user_role = Role.objects.filter(name="User").first()
     ## Create an Admin
     admin_email = "admin@test.de"
-    admin = User(username=admin_email, password=generate_password_hash("test"), email=admin_email, role=admin_role, date_of_birth=datetime.datetime(1995, 1, 31))
+    admin = User(username=admin_email, password=generate_password_hash("test"), email=admin_email, role=admin_role, date_of_birth=datetime.datetime(1995, 1, 31), is_active= True)
     admin.save()
-    click.echo('Admin user with username testmail@test.de and password test created')
+    click.echo('Admin user with username admin@test.de and password test created')
 
     ## Create a Teacher
     teacher_email = "teacher@test.de"
     teacher = User(username=teacher_email, password=generate_password_hash("test"), email=teacher_email, role=teacher_role,
-                   date_of_birth=datetime.datetime(1995, 1, 31))
+                   date_of_birth=datetime.datetime(1995, 1, 31), is_active= True)
     teacher.save()
     click.echo('Teacher user with username teacher@test.de and password test created')
 
@@ -175,7 +175,8 @@ def create_users():
             password=generate_password_hash("test"),
             email=email,
             role=user_role,
-            date_of_birth=datetime.datetime(1995, 1, 31)
+            date_of_birth=datetime.datetime(1995, 1, 31),
+            is_active=True
         )
         student.save()
         click.echo(f'Student user with username {email} and password test created')
