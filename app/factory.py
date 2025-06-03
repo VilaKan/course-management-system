@@ -88,6 +88,7 @@ def load_blueprints(app):
     from app.main.views import bp_main
     from app.books.views import bp_books
     from app.statistics.views import bp_statistics
+    from app.schedule_management.views import bp_schedulemanagement
     from app.bookings.views import bp_bookings
     from app.dozent.views import bp_dozent
     from app.user_mgmt.views import bp_user_mgmt
@@ -98,6 +99,7 @@ def load_blueprints(app):
     app.register_blueprint(bp_users, url_prefix='/users')
     app.register_blueprint(bp_books, url_prefix='/books')
     app.register_blueprint(bp_statistics, url_prefix='/statistics')
+    app.register_blueprint(bp_schedulemanagement)
     app.register_blueprint(bp_bookings, url_prefix='/bookings')
     app.register_blueprint(bp_dozent, url_prefix='/dozent')
     app.register_blueprint(bp_user_mgmt, url_prefix='/user_mgmt')
@@ -140,7 +142,7 @@ def create_appointments():
     users = User.objects.filter(role=user_role)
 
     for i in range(10):
-        appointment = Appointment(date=datetime.datetime(2025, 1, i+1), max_students=12, course=courses[i], room=rooms[i], teacher=teacher, students=users[0:i+1])
+        appointment = Appointment(date=datetime.datetime(2025, 1, i+1), max_students=12, course=courses[i], room=rooms[i], teacher=teacher, students=users[0:i+1], canceled=False)
         appointment.save()
 
     click.echo('Created Appointments')
