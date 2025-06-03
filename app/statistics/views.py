@@ -7,7 +7,6 @@ from collections import Counter
 
 
 from app.appointment.model import Appointment
-from app.course.model import Course
 
 # define the blueprint
 bp_statistics = Blueprint('statistics', __name__, template_folder='pages')
@@ -19,7 +18,9 @@ bp_statistics = Blueprint('statistics', __name__, template_folder='pages')
 @bp_statistics.route('/')
 @login_required
 def home():
-    return render_template('statistics.html', info=session)
+    session['yam_valid'] = False
+    session['year_only_valid'] = False
+    return render_template('statistics.html', info=session, yam_valid = session['yam_valid'], year_only_valid = session['year_only_valid'])
 
 # index is list view
 @bp_statistics.route('/generate_year_and_month', methods=['POST'])
@@ -31,6 +32,10 @@ def generate_year_and_month():
     last_day = calendar.monthrange(int(year), int(month))[1]
     date_max = datetime.date(int(year), int(month), last_day)
     appointments = Appointment.objects.filter(date__gte=date_min, date__lte=date_max)
+    if len(appointments) == 0:
+        session['yam_valid'] = False
+    else:
+        session['yam_valid'] = True
 
     # Count days of the week, so we get an array with length of seven (since we have seven weekdays)
     # We just increment the counter at the correct index for each appointment
@@ -78,7 +83,7 @@ def generate_year_and_month():
     plt.axis('equal')
     plt.tight_layout()
     plt.savefig("static/plots/appointments_pie.png", dpi=300, bbox_inches='tight')
-    return render_template('statistics.html', info=session)
+    return render_template('statistics.html', info=session, yam_valid = session['yam_valid'], year_only_valid = session['year_only_valid'])
 
 # Factory function which gets called on every slice of the pie chart
 # This is used to display the actual amount as an integer instead of a percentage which is the default for a matplotlib pie chart
@@ -101,6 +106,10 @@ def generate_year_only():
     date_max = datetime.date(int(year), 12, last_day)
     appointments = Appointment.objects.filter(date__gte=date_min, date__lte=date_max)
     appointments = sorted(appointments, key=lambda appt: len(appt.students), reverse=True)
+    if len(appointments) == 0:
+        session['year_only_valid'] = False
+    else:
+        session['year_only_valid'] = True
     courses = []
     students = []
     for appointment in appointments:
@@ -119,4 +128,4 @@ def generate_year_only():
 
     plt.tight_layout()
     plt.savefig("static/plots/appointments_bars.png", dpi=300, bbox_inches='tight')
-    return render_template('statistics.html', info=session)
+    return render_template('statistics.html', info=session, yam_valid = session['yam_valid'], year_only_valid = session['year_only_valid'])

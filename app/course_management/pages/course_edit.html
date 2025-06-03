@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h2>Kurs bearbeiten</h2>
+<form method="POST">
+  <div class="form-group">
+    <label for="name">Kursname:</label>
+    <input type="text" class="form-control" name="name" id="name" value="{{ course.name }}" required>
+  </div>
+  <div class="form-group">
+    <label for="description">Beschreibung:</label>
+    <textarea class="form-control" name="description" id="description">{{ course.description }}</textarea>
+  </div>
+  <br>
+  <button type="submit" class="btn btn-primary">Speichern</button>
+  <a href="{{ url_for('course_list.home') }}" class="btn btn-secondary">Abbrechen</a>
+</form>
+{% endblock %}

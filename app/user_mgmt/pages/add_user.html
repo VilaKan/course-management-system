@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Neuen Benutzer anlegen{% endblock %}
+
+{% block body %}
+<h2>Neuen Benutzer anlegen</h2>
+
+<form method="POST">
+  <!-- E-Mail -->
+  <div class="form-group">
+    <label for="email">E-Mail:</label>
+    <input type="email" class="form-control {% if missing_email or invalid_email %}is-invalid{% endif %}"
+           id="email" name="email" value="{{ request.form.get('email', '') }}">
+    {% if missing_email %}
+      <div class="invalid-feedback">Bitte E-Mail angeben.</div>
+    {% elif invalid_email %}
+      <div class="invalid-feedback">Ungültige E-Mail-Adresse.</div>
+    {% endif %}
+  </div>
+
+  <!-- Passwort -->
+<div class="form-group">
+  <label for="password">Passwort:</label>
+  <input type="password" class="form-control {% if missing_password or password_too_short %}is-invalid{% endif %}"
+         id="password" name="password">
+  {% if missing_password %}
+    <div class="invalid-feedback">Bitte Passwort angeben.</div>
+  {% elif password_too_short %}
+    <div class="invalid-feedback">Das Passwort muss mindestens 8 Zeichen lang sein.</div>
+  {% endif %}
+</div>
+
+
+  <!-- Geburtsdatum -->
+  <div class="form-group">
+    <label for="geburtsdatum">Geburtsdatum:</label>
+    <input type="date" class="form-control {% if missing_dob %}is-invalid{% endif %}"
+           id="geburtsdatum" name="geburtsdatum" value="{{ request.form.get('geburtsdatum', '') }}">
+    {% if missing_dob %}
+      <div class="invalid-feedback">Bitte Geburtsdatum angeben.</div>
+    {% endif %}
+  </div>
+
+  <!-- Rolle -->
+  <div class="form-group">
+    <label for="role">Rolle:</label>
+    <select class="form-control {% if missing_role %}is-invalid{% endif %}" id="role" name="role">
+      <option value="">Bitte wählen</option>
+      <option value="Admin" {% if request.form.get('role') == 'Admin' %}selected{% endif %}>Admin</option>
+      <option value="Teacher" {% if request.form.get('role') == 'Teacher' %}selected{% endif %}>Teacher</option>
+      <option value="User" {% if request.form.get('role') == 'User' %}selected{% endif %}>User</option>
+    </select>
+    {% if missing_role %}
+      <div class="invalid-feedback">Bitte Rolle auswählen.</div>
+    {% endif %}
+  </div>
+
+  <!-- Buttonbereich -->
+  <div class="mt-4 d-flex justify-content-between">
+    <div>
+      <button type="submit" class="btn btn-primary">➕ Benutzer anlegen</button>
+      <a href="{{ url_for('user_mgmt.home') }}" class="btn btn-secondary">❌ Abbrechen</a>
+    </div>
+    <div></div>
+  </div>
+</form>
+{% endblock %}
