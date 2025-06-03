@@ -12,16 +12,21 @@
             <th>Termin</th>
             <th>Kursleiter</th>
             <th>Raum</th>
-            <th>Status</th>
+            <th>Storniert</th>
         </tr>
     </thead>
     <tbody>
-        {% for kurse in my_courses %}
+        {% for kurs in my_courses %}
             <tr onclick="window.location.href='{{ url_for('bookings.my_clicked_courses', appointment_id=kurse.id) }}'" style="cursor:pointer;">
-            <td>{{ kurse.Kursname }}</td>
-            <td>{{ kurse.Termin }}</td>
-            <td>{{ kurse.Kursleiter }}</td>
-            <td>{{ kurse.Raum }}</td>
+            <td>{{ kurs.Kursname }}</td>
+            <td>{{ kurs.Termin }}</td>
+            <td>{{ kurs.Kursleiter }}</td>
+            <td>{{ kurs.Raum }}</td>
+            {% if kurs.Storniert == "False" %}
+                <td>Nein</td>
+            {% elif kurs.Storniert == "True"%}
+                <td>Ja</td>
+            {% endif %}
             </tr>
         {% endfor %}
     </tbody>
