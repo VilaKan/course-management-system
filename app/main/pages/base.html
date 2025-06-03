@@ -17,6 +17,7 @@
     {% endblock %}
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -58,7 +59,7 @@
             {% endif %}
             {% if current_user.role.name == 'Admin' %}
             <h2>Adminbereich:</h2>
-            <p class="h5"><a href="#">Benutzerverwaltung</a></p>
+            <p class="h5"><a href="{{ url_for('user_mgmt.home') }}">Benutzerverwaltung</a></p>
             <p class="h5"><a href="#">Kursverwaltung</a></p>
             <p class="h5"><a href="{{ url_for('statistics.home') }}">Auswertungen</a></p>
             {% endif %}
