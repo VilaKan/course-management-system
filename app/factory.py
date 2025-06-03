@@ -91,6 +91,7 @@ def load_blueprints(app):
     from app.bookings.views import bp_bookings
     from app.dozent.views import bp_dozent
     from app.user_mgmt.views import bp_user_mgmt
+    from app.course_management.views import bp_course_list
 
     # register blueprints
     app.register_blueprint(bp_main)
@@ -98,12 +99,9 @@ def load_blueprints(app):
     app.register_blueprint(bp_books, url_prefix='/books')
     app.register_blueprint(bp_statistics, url_prefix='/statistics')
     app.register_blueprint(bp_bookings, url_prefix='/bookings')
-
     app.register_blueprint(bp_dozent, url_prefix='/dozent')
     app.register_blueprint(bp_user_mgmt, url_prefix='/user_mgmt')
-
-
-
+    app.register_blueprint(bp_course_list, url_prefix='/course_list')
 
 
 @click.command('init-db')
