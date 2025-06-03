@@ -63,8 +63,8 @@ def clicked_course(course_id):
 
 
 
-#Kursbelegungen mit Filterung : Wenn der selber Kursleiter im selben Datum belegt wird,dann Warnmeldung
 #Wenn Kurs noch einen freien Platz hatte , aber einer der Benutzer schneller als der andere war Warnmeldung
+#Wenn Kurs erfolgreich belegt wurde
 @bp_bookings.route('/booked_course/<string:appointment_id>', methods=['POST'])
 def booked_course(appointment_id):
     appointment = Appointment.objects(id=ObjectId(appointment_id)).first()
@@ -128,7 +128,7 @@ def logout_courses(appointment_id):
         return redirect(url_for('bookings.my_courses'))
 
     if kurse.date < datetime.now().date():
-        flash("Warnung: Abmeldung am Kurstag nicht mehr möglich", 'danger')
+        flash("Warnung: Abmeldung am Kurstag oder nach Kurstag nicht mehr möglich", 'danger')
         return redirect(url_for('bookings.my_courses'))
 
     kurse.students.remove(current_user)
