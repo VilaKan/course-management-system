@@ -134,7 +134,7 @@ def create_appointments():
     users = User.objects.filter(role=user_role)
 
     for i in range(10):
-        appointment = Appointment(date=datetime.datetime(2025, 1, i+1), max_students=12, course=courses[i], room=rooms[i], teacher=teacher, students=users[0:i+1])
+        appointment = Appointment(date=datetime.datetime(2025, 1, i+1), max_students=12, course=courses[i], room=rooms[i], teacher=teacher, students=users[0:i+1], canceled=False)
         appointment.save()
 
     click.echo('Created Appointments')
