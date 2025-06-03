@@ -7,11 +7,11 @@ from app.users.models import User
 from app.course.model import Course
 from app.role.model import Role
 
-bp_schedulemanagement = Blueprint('schedulemanagement', __name__, template_folder='pages')
+bp_schedulemanagement = Blueprint('schedule_mgmt', __name__, template_folder='pages')
 
-@bp_schedulemanagement.route("/Terminverwaltung", methods=["GET", "POST"])
+@bp_schedulemanagement.route("/", methods=["GET", "POST"])
 @login_required
-def schedule_management():
+def home():
     if current_user.role.name != "Admin":
         abort(403)
 

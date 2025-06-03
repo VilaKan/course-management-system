@@ -25,7 +25,6 @@
           <td style="border: 1px solid #ccc; padding: 8px;">{{ course.description }}</td>
           <td style="border: 1px solid #ccc; padding: 8px;">
             <a href="{{ url_for('course_list.edit_course', course_id=course.id) }}">🛠️</a>
-            <a href="#" style="margin-left: 10px;">📅</a>
           </td>
         </tr>
         {% endfor %}
@@ -39,6 +38,11 @@
 <!-- Kurs hinzufügen Button -->
 <div style="margin-top: 20px;">
   <a href="{{ url_for('course_list.create_course') }}" class="btn btn-primary">+ Kurs anlegen</a>
+</div>
+
+<!-- Terminverwaltung Button -->
+<div style="margin-top: 20px;">
+  <a href="{{ url_for('schedule_mgmt.home') }}" class="btn btn-primary">+ Terminverwaltung</a>
 </div>
 
 <!-- JS für Filter -->
