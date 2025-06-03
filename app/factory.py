@@ -60,9 +60,11 @@ def create_app(config=None):
     login_manager.login_message_category = "warning"
     login_manager.init_app(app)
 
+
     @login_manager.user_loader
     def load_user(user_id):
         return User.objects.get(pk=user_id)
+
 
     # import and register the different asset bundles
     assets_loader = PythonAssetsLoader(assets)
@@ -86,6 +88,7 @@ def load_blueprints(app):
     from app.main.views import bp_main
     from app.books.views import bp_books
     from app.statistics.views import bp_statistics
+    from app.bookings.views import bp_bookings
     from app.dozent.views import bp_dozent
     from app.user_mgmt.views import bp_user_mgmt
 
@@ -94,6 +97,8 @@ def load_blueprints(app):
     app.register_blueprint(bp_users, url_prefix='/users')
     app.register_blueprint(bp_books, url_prefix='/books')
     app.register_blueprint(bp_statistics, url_prefix='/statistics')
+    app.register_blueprint(bp_bookings, url_prefix='/bookings')
+
     app.register_blueprint(bp_dozent, url_prefix='/dozent')
     app.register_blueprint(bp_user_mgmt, url_prefix='/user_mgmt')
 
