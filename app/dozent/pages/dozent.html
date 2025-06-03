@@ -1,0 +1,52 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Dozentenverwaltung{% endblock %}
+
+{% block body %}
+  <h1>Dozentenverwaltung</h1>
+
+  <!-- Filterform -->
+  <form method="POST" style="margin-bottom: 20px;">
+    <label for="start_date">Von:</label>
+    <input type="date" id="start_date" name="start_date">
+
+    <label for="end_date" style="margin-left: 10px;">Bis:</label>
+    <input type="date" id="end_date" name="end_date">
+
+    <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Filtern</button>
+  </form>
+
+  {% if error_message %}
+    <div class="alert alert-warning" role="alert">
+      {{ error_message }}
+    </div>
+  {% endif %}
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Datum</th>
+        <th>Kurs</th>
+        <th>Raum</th>
+        <th>Teilnehmeranzahl</th>
+        <th>Aktion</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for termin in termine %}
+      <tr>
+        <td>{{ termin.date }}</td>
+        <td>{{ termin.kurs }}</td>
+        <td>{{ termin.raum }}</td>
+        <td>{{ termin.anzahl }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('dozent.teilnehmerliste') }}">
+            <input type="hidden" name="appointment_id" value="{{ termin.id }}">
+            <button type="submit" class="btn btn-primary">Teilnehmerliste erstellen</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

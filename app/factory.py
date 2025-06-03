@@ -63,7 +63,7 @@ def create_app(config=None):
 
     @login_manager.user_loader
     def load_user(user_id):
-            return User.objects.get(pk=user_id)
+        return User.objects.get(pk=user_id)
 
 
     # import and register the different asset bundles
@@ -89,6 +89,8 @@ def load_blueprints(app):
     from app.books.views import bp_books
     from app.statistics.views import bp_statistics
     from app.bookings.views import bp_bookings
+    from app.dozent.views import bp_dozent
+    from app.user_mgmt.views import bp_user_mgmt
 
     # register blueprints
     app.register_blueprint(bp_main)
@@ -97,6 +99,8 @@ def load_blueprints(app):
     app.register_blueprint(bp_statistics, url_prefix='/statistics')
     app.register_blueprint(bp_bookings, url_prefix='/bookings')
 
+    app.register_blueprint(bp_dozent, url_prefix='/dozent')
+    app.register_blueprint(bp_user_mgmt, url_prefix='/user_mgmt')
 
 
 
@@ -160,14 +164,14 @@ def create_users():
     user_role = Role.objects.filter(name="User").first()
     ## Create an Admin
     admin_email = "admin@test.de"
-    admin = User(username=admin_email, password=generate_password_hash("test"), email=admin_email, role=admin_role, date_of_birth=datetime.datetime(1995, 1, 31))
+    admin = User(username=admin_email, password=generate_password_hash("test"), email=admin_email, role=admin_role, date_of_birth=datetime.datetime(1995, 1, 31), is_active= True)
     admin.save()
-    click.echo('Admin user with username testmail@test.de and password test created')
+    click.echo('Admin user with username admin@test.de and password test created')
 
     ## Create a Teacher
     teacher_email = "teacher@test.de"
     teacher = User(username=teacher_email, password=generate_password_hash("test"), email=teacher_email, role=teacher_role,
-                   date_of_birth=datetime.datetime(1995, 1, 31))
+                   date_of_birth=datetime.datetime(1995, 1, 31), is_active= True)
     teacher.save()
     click.echo('Teacher user with username teacher@test.de and password test created')
 
@@ -178,7 +182,8 @@ def create_users():
             password=generate_password_hash("test"),
             email=email,
             role=user_role,
-            date_of_birth=datetime.datetime(1995, 1, 31)
+            date_of_birth=datetime.datetime(1995, 1, 31),
+            is_active=True
         )
         student.save()
         click.echo(f'Student user with username {email} and password test created')
