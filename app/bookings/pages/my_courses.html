@@ -17,7 +17,7 @@
     </thead>
     <tbody>
         {% for kurs in my_courses %}
-            <tr onclick="window.location.href='{{ url_for('bookings.my_clicked_courses', appointment_id=kurse.id) }}'" style="cursor:pointer;">
+            <tr onclick="window.location.href='{{ url_for('bookings.my_clicked_courses', appointment_id=kurs.id) }}'" style="cursor:pointer;">
             <td>{{ kurs.Kursname }}</td>
             <td>{{ kurs.Termin }}</td>
             <td>{{ kurs.Kursleiter }}</td>
