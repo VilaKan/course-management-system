@@ -63,7 +63,7 @@ def create_app(config=None):
 
     @login_manager.user_loader
     def load_user(user_id):
-            return User.objects.get(pk=user_id)
+        return User.objects.get(pk=user_id)
 
 
     # import and register the different asset bundles
@@ -88,18 +88,22 @@ def load_blueprints(app):
     from app.main.views import bp_main
     from app.books.views import bp_books
     from app.statistics.views import bp_statistics
+    from app.schedule_management.views import bp_schedulemanagement
     from app.bookings.views import bp_bookings
+    from app.dozent.views import bp_dozent
+    from app.user_mgmt.views import bp_user_mgmt
+    from app.course_management.views import bp_course_list
 
     # register blueprints
     app.register_blueprint(bp_main)
     app.register_blueprint(bp_users, url_prefix='/users')
     app.register_blueprint(bp_books, url_prefix='/books')
     app.register_blueprint(bp_statistics, url_prefix='/statistics')
+    app.register_blueprint(bp_schedulemanagement, url_prefix='/schedule_mgmt')
     app.register_blueprint(bp_bookings, url_prefix='/bookings')
-
-
-
-
+    app.register_blueprint(bp_dozent, url_prefix='/dozent')
+    app.register_blueprint(bp_user_mgmt, url_prefix='/user_mgmt')
+    app.register_blueprint(bp_course_list, url_prefix='/course_list')
 
 
 @click.command('init-db')
@@ -138,8 +142,12 @@ def create_appointments():
     users = User.objects.filter(role=user_role)
 
     for i in range(10):
-        appointment = Appointment(date=datetime.datetime(2025, 1, 1), max_students=12, course=courses[i], room=rooms[i], teacher=teacher, students=users[0:i+1])
+        appointment = Appointment(date=datetime.datetime(2025, 1, i+1), max_students=12, course=courses[i], room=rooms[i], teacher=teacher, students=users[0:i+1], canceled=False)
         appointment.save()
+
+    appointment_future = Appointment(date=datetime.datetime(2050, 1, 1), max_students=12, course=courses[0], room=rooms[0],
+                              teacher=teacher, students=users[0:1 + 1], canceled=False)
+    appointment_future.save()
 
     click.echo('Created Appointments')
 
@@ -160,14 +168,14 @@ def create_users():
     user_role = Role.objects.filter(name="User").first()
     ## Create an Admin
     admin_email = "admin@test.de"
-    admin = User(username=admin_email, password=generate_password_hash("test"), email=admin_email, role=admin_role, date_of_birth=datetime.datetime(1995, 1, 31))
+    admin = User(username=admin_email, password=generate_password_hash("test"), email=admin_email, role=admin_role, date_of_birth=datetime.datetime(1995, 1, 31), is_active= True)
     admin.save()
-    click.echo('Admin user with username testmail@test.de and password test created')
+    click.echo('Admin user with username admin@test.de and password test created')
 
     ## Create a Teacher
     teacher_email = "teacher@test.de"
     teacher = User(username=teacher_email, password=generate_password_hash("test"), email=teacher_email, role=teacher_role,
-                   date_of_birth=datetime.datetime(1995, 1, 31))
+                   date_of_birth=datetime.datetime(1995, 1, 31), is_active= True)
     teacher.save()
     click.echo('Teacher user with username teacher@test.de and password test created')
 
@@ -178,7 +186,8 @@ def create_users():
             password=generate_password_hash("test"),
             email=email,
             role=user_role,
-            date_of_birth=datetime.datetime(1995, 1, 31)
+            date_of_birth=datetime.datetime(1995, 1, 31),
+            is_active=True
         )
         student.save()
         click.echo(f'Student user with username {email} and password test created')

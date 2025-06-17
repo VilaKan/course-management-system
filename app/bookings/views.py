@@ -42,14 +42,15 @@ def home():
                    'Kursleiter' : f'{appointment.teacher.username}'
                   ,'Freie_Plaetze': f'{appointment.max_students - len(appointment.students)}',
                    'Max_studenten': f'{appointment.max_students}',
-                   'Raum': f'{appointment.room.name}',}
+                   'Raum': f'{appointment.room.name}',
+                   'Storniert' : f'{appointment.canceled}'}
         table_data.append(new_row)
     return render_template('bookings.html', info=session, table_data=table_data)
 
 
 
 
-#Benutzer sieht die Terminübersicht und wählt ein Termin seiner Wahl aus und wird weitergeleitet zu den
+# Benutzer sieht die Terminübersicht und wählt ein Termin seiner Wahl aus und wird weitergeleitet zu den
 # Inforrmationen und zu einem Button mit "Kurs belegen"
 @bp_bookings.route('/course/<string:course_id>')
 @login_required
@@ -89,18 +90,19 @@ def my_courses():
 
     table_data = []
 
-    for kurse in my_courses :
+    for appointment in my_courses :
 
-        if current_user not in kurse.students :
+        if current_user not in appointment.students :
             continue
 
 
-        new_row = { 'id': str(kurse.id),
-                    'Kursname': f'{kurse.course.name}',
-                    'Termin': f'{kurse.date}',
-                    'Kursleiter': f'{kurse.teacher.username}',
-                    'Raum': f'{kurse.room.name}',
-                    'Studenten': f'{kurse.students}'}
+        new_row = { 'id': str(appointment.id),
+                    'Kursname': f'{appointment.course.name}',
+                    'Termin': f'{appointment.date}',
+                    'Kursleiter': f'{appointment.teacher.username}',
+                    'Raum': f'{appointment.room.name}',
+                    'Studenten': f'{appointment.students}',
+                    'Storniert': f'{appointment.canceled}'}
         table_data.append(new_row)
 
 

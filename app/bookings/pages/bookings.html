@@ -12,7 +12,7 @@
             <th>Kursleiter</th>
             <th>Freie Plätze</th>
             <th>Raum</th>
-            <th>Status</th>
+            <th>Storniert</th>
 
         </tr>
     </thead>
@@ -24,6 +24,11 @@
             <td>{{ data.Kursleiter }}</td>
             <td>{{ data.Freie_Plaetze }}/{{ data.Max_studenten }}</td>
             <td>{{ data.Raum}}</td>
+            {% if data.Storniert == "False" %}
+                <td>Nein</td>
+            {% elif data.Storniert == "True"%}
+                <td>Ja</td>
+            {% endif %}
 
         </tr>
         {% endfor %}
