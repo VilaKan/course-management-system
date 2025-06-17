@@ -15,10 +15,11 @@ from textwrap import wrap
 
 bp_bookings = Blueprint('bookings', __name__, template_folder='pages')
 
-#Terminübersichtstabelle mit allen Terminen die vom Kursleiter/Admin erstellt wurden
-#Wenn das heutige Datum weiter ist als das vom Termin wird es ausgeblendet
-#Wenn die Maximale Anzahl der Plätze erreicht wurde dann ausblenden
-#Wenn der Current User schon den Kurs belegt hat, dann ausblenden
+#appointment-table with all appointments from courseleader/Admin created
+# If today's date is later than the course date → hide the course
+# If the maximum number of participants has been reached → hide the course
+# If the current user has already registered for the course → hide the course
+
 @bp_bookings.route('/')
 @login_required
 def home():
@@ -72,6 +73,11 @@ def booked_course(appointment_id):
 
     if len(appointment.students) == appointment.max_students:
         flash("Der Kurs wurde soeben von einem anderen Nutzer belegt worden", 'danger')
+        return redirect(url_for('bookings.home'))
+
+    samedate = Appointment.objects(date=appointment.date, students= current_user).first()
+    if samedate:
+        flash("Du hast bereits einen Termin am selben Tag belegt",'danger')
         return redirect(url_for('bookings.home'))
 
 
