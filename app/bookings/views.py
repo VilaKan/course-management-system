@@ -65,8 +65,9 @@ def clicked_course(course_id):
 
 
 
-#Wenn Kurs noch einen freien Platz hatte , aber einer der Benutzer schneller als der andere war Warnmeldung
-#Wenn Kurs erfolgreich belegt wurde
+#if course still has 1 place left but another user clicked faster than the other, flash warnsignal
+#course can only be taken once a day , if you want to book more than 1 course in the same day, flash warnsignal
+#if course has been succesfully booked
 @bp_bookings.route('/booked_course/<string:appointment_id>', methods=['POST'])
 def booked_course(appointment_id):
     appointment = Appointment.objects(id=ObjectId(appointment_id)).first()
@@ -81,14 +82,13 @@ def booked_course(appointment_id):
         return redirect(url_for('bookings.home'))
 
 
-
     appointment.students.append(current_user)
     appointment.save()
     flash("Kurs wurde erfolgreich belegt", 'success')
     return redirect(url_for('bookings.home'))
 
 
-#Meine Kurser Terminliste aller Belegungen des Benutzers
+#my courses: appointment-lists of all bookings of the user
 @bp_bookings.route('/my_courses')
 @login_required
 def my_courses():
@@ -115,7 +115,7 @@ def my_courses():
     return render_template('my_courses.html', info=session, my_courses=table_data)
 
 
-
+#tables of my courses that user applied to
 @bp_bookings.route('/my_clicked_courses/<string:appointment_id>')
 @login_required
 def my_clicked_courses(appointment_id):
@@ -126,7 +126,7 @@ def my_clicked_courses(appointment_id):
 
 
 
-
+#logout of courses if the coursedate is still in the future
 @bp_bookings.route('/logout_courses/<string:appointment_id>',methods=['POST'])
 @login_required
 def logout_courses(appointment_id):
@@ -145,6 +145,8 @@ def logout_courses(appointment_id):
     return redirect(url_for('bookings.my_courses'))
 
 
+#pdf to confirm the participation of the course after course took place
+# if course didnt took place yet, flash warnsignal
 
 @bp_bookings.route('/confirmed_participant_pdf/<string:appointment_id>')
 @login_required
