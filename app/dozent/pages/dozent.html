@@ -1,34 +1,34 @@
 ﻿{% extends "base.html" %}
 
-{% block title %}Dozentenverwaltung{% endblock %}
+{% block title %}Meine Termine{% endblock %}
 
 {% block body %}
-  <h1>Dozentenverwaltung</h1>
+  <h1 class="mb-4 text-center">Meine Termine</h1>
 
-  <!-- Filterform -->
-  <form method="POST" style="margin-bottom: 20px;">
-    <label for="start_date">Von:</label>
-    <input type="date" id="start_date" name="start_date">
+  <!-- Filterformular -->
+  <form method="POST" class="d-flex align-items-center mb-4 gap-2 justify-content-center">
+    <label for="start_date" class="form-label mb-0">Von:</label>
+    <input type="date" id="start_date" name="start_date" class="form-control" style="width: 170px;">
 
-    <label for="end_date" style="margin-left: 10px;">Bis:</label>
-    <input type="date" id="end_date" name="end_date">
+    <label for="end_date" class="form-label mb-0 ms-3">Bis:</label>
+    <input type="date" id="end_date" name="end_date" class="form-control" style="width: 170px;">
 
-    <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Filtern</button>
+    <button type="submit" class="btn btn-outline-primary ms-3">🔍 Filtern</button>
   </form>
 
   {% if error_message %}
-    <div class="alert alert-warning" role="alert">
+    <div class="alert alert-warning text-center" role="alert">
       {{ error_message }}
     </div>
   {% endif %}
 
-  <table class="table">
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>Datum</th>
         <th>Kurs</th>
         <th>Raum</th>
-        <th>Teilnehmeranzahl</th>
+        <th class="text-center">Teilnehmeranzahl</th>
         <th>Aktion</th>
       </tr>
     </thead>
@@ -38,11 +38,11 @@
         <td>{{ termin.date }}</td>
         <td>{{ termin.kurs }}</td>
         <td>{{ termin.raum }}</td>
-        <td>{{ termin.anzahl }}</td>
+        <td class="text-center">{{ termin.anzahl }}</td>
         <td>
           <form method="POST" action="{{ url_for('dozent.teilnehmerliste') }}">
             <input type="hidden" name="appointment_id" value="{{ termin.id }}">
-            <button type="submit" class="btn btn-primary">Teilnehmerliste erstellen</button>
+            <button type="submit" class="btn btn-primary btn-sm">👥 Teilnehmerliste erstellen</button>
           </form>
         </td>
       </tr>

@@ -3,31 +3,30 @@
 {% block title %}Teilnehmerliste{% endblock %}
 
 {% block body %}
-<h1>Teilnehmerliste</h1>
+  <h1 class="mb-4 text-center">Teilnehmerliste</h1>
 
-{% if students %}
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Nr.</th>
-        <th>Name</th>
-        <th>E-Mail</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for student in students %}
-      <tr>
-        <td>{{ loop.index }}</td>
-        <td>{{ student.username }}</td>
-        <td>{{ student.email }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% else %}
-  <div class="alert alert-warning" role="alert">
-    Für diesen Termin sind keine Teilnehmer angemeldet.
-  </div>
-{% endif %}
+  {% if students %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Nr.</th>
+          <th>Name</th>
+          <th>E-Mail</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ student.username }}</td>
+          <td>{{ student.email }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-warning text-center" role="alert">
+      Für diesen Termin sind keine Teilnehmer angemeldet.
+    </div>
+  {% endif %}
 {% endblock %}
-
