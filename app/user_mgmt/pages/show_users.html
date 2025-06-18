@@ -5,28 +5,24 @@
 {% block body %}
 
 <!-- 🔍 Filterbereich -->
-<form method="GET" class="mb-3">
+<div class="mb-3">
   <div class="d-flex align-items-center gap-3 flex-wrap">
     <div>
       <label for="role_filter" class="form-label">Rolle:</label>
-      <select id="role_filter" name="role" class="form-select">
+      <select id="role_filter" class="form-select">
         <option value="">Alle</option>
-        <option value="Admin" {% if request.args.get('role') == 'Admin' %}selected{% endif %}>Admin</option>
-        <option value="Teacher" {% if request.args.get('role') == 'Teacher' %}selected{% endif %}>Teacher</option>
-        <option value="User" {% if request.args.get('role') == 'User' %}selected{% endif %}>User</option>
+        <option value="Admin">Admin</option>
+        <option value="Teacher">Teacher</option>
+        <option value="User">User</option>
       </select>
     </div>
 
     <div>
-      <label for="search" class="form-label">Suchen (E-Mail):</label>
-      <input type="text" id="search" name="search" class="form-control" value="{{ request.args.get('search', '') }}">
-    </div>
-
-    <div class="align-self-end">
-      <button type="submit" class="btn btn-outline-primary">🔍 Filtern</button>
+      <label for="userSearch" class="form-label">Suchen (E-Mail):</label>
+      <input type="text" id="userSearch" class="form-control" placeholder="E-Mail suchen...">
     </div>
   </div>
-</form>
+</div>
 
 <!-- 📋 Nutzerliste -->
 <div style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc;">
@@ -56,5 +52,30 @@
 <div style="margin-top: 20px;">
   <a href="{{ url_for('user_mgmt.add_user') }}" class="btn btn-primary">+ Benutzer anlegen</a>
 </div>
+
+<!-- 🔎 Filter-Script -->
+<script>
+  const roleFilter = document.getElementById('role_filter');
+  const searchInput = document.getElementById('userSearch');
+  const rows = document.querySelectorAll('#userTable tbody tr');
+
+  function applyFilter() {
+    const searchValue = searchInput.value.toLowerCase();
+    const selectedRole = roleFilter.value;
+
+    rows.forEach(row => {
+      const email = row.children[0].textContent.toLowerCase();
+      const role = row.children[1].textContent;
+
+      const matchesSearch = email.includes(searchValue);
+      const matchesRole = !selectedRole || role === selectedRole;
+
+      row.style.display = matchesSearch && matchesRole ? '' : 'none';
+    });
+  }
+
+  roleFilter.addEventListener('change', applyFilter);
+  searchInput.addEventListener('keyup', applyFilter);
+</script>
 
 {% endblock %}
