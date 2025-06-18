@@ -30,9 +30,6 @@ def home():
         if appointment.date < datetime.now().date() :
             continue
 
-        if len(appointment.students)==appointment.max_students :
-            continue
-
         if current_user in appointment.students :
             continue
 
@@ -71,7 +68,7 @@ def booked_course(appointment_id):
     appointment = Appointment.objects(id=ObjectId(appointment_id)).first()
 
     if len(appointment.students) == appointment.max_students:
-        flash("Der Kurs wurde soeben von einem anderen Nutzer belegt worden", 'danger')
+        flash("Der Kurs Kurs ist voll", 'danger')
         return redirect(url_for('bookings.home'))
 
 
