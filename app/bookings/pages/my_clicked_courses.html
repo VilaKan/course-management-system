@@ -25,17 +25,15 @@
     </div>
 
    <div class="mt-4">
-       <form method="post" action="{{ url_for('bookings.logout_courses', appointment_id=appointment.id) }}
-">
-           <button type="submit" class="btn btn-primary">Abmelden</button>
+       <form method="post" action="{{ url_for('bookings.logout_courses', appointment_id=appointment.id) }}">
+           <button type="submit" class="btn btn-primary">❌ Abmelden</button>
        </form>
-   </div>
 
-    <div class="container mt-4">
+    <br> </br>
+
         <a href="{{ url_for('bookings.confirmed_participant_pdf', appointment_id=appointment.id) }}"
    target="_blank"
-   class="btn btn-primary">
-    Teilnahmenachweis anzeigen
+   class="btn btn-primary">📃 Teilnahmenachweis anzeigen
         </a>
     </div>
 
