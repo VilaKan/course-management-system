@@ -1,17 +1,25 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h2>Neuen Kurs anlegen</h2>
+<!-- Überschrift zentriert und groß -->
+<h1 class="text-center mb-5 display-4">Neuen Kurs anlegen</h1>
+
+<!-- Formular zum Erstellen eines neuen Kurses -->
 <form method="POST">
   <div class="form-group">
+    <!-- Eingabe für Kursnamen -->
     <label for="name">Kursname:</label>
     <input type="text" class="form-control" name="name" id="name">
   </div>
+
   <div class="form-group">
+    <!-- Eingabe für Kursbeschreibung -->
     <label for="description">Beschreibung:</label>
     <textarea class="form-control" name="description" id="description"></textarea>
   </div>
+
   <br>
+  <!-- Speichern-Button + Zurück-Link -->
   <button type="submit" class="btn btn-success">💾 Speichern</button>
   <a href="{{ url_for('course_list.home') }}" class="btn btn-secondary">❌ Abbrechen</a>
 </form>
