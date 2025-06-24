@@ -36,7 +36,7 @@ def home():
 
         new_row = {'id': str(appointment.course.id),
                    'Kursname': f'{appointment.course.name}',
-                   'Termin': f'{appointment.date.strftime('%d.%m.%Y')}',
+                   'Termin': f"{appointment.date.strftime('%d.%m.%Y')}",
                    'Kursleiter' : f'{appointment.teacher.username}'
                   ,'Freie_Plaetze': f'{appointment.max_students - len(appointment.students)}',
                    'Max_studenten': f'{appointment.max_students}',

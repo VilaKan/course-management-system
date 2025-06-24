@@ -82,7 +82,7 @@ def home():
                 termin.canceled = True
                 termin.save()
 
-        return redirect(url_for('schedulemanagement.schedule_management'))
+        return redirect(url_for('schedule_mgmt.home'))
 
     termine = Appointment.objects().order_by('date')
     courses = Course.objects()
