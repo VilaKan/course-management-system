@@ -5,8 +5,8 @@
 
 {% block body %}
 <h1 style="text-align: center;">Meine Kurse</h1>
-<table class="table table-hover">
-    <thead>
+<table id="userTable" style="width: 100%; border-collapse: collapse;">
+    <thead style="position: sticky; top: 0; background-color: #f9f9f9;">
         <tr>
             <th>Kursname</th>
             <th>Termin</th>
@@ -18,14 +18,14 @@
     <tbody>
         {% for kurs in my_courses %}
             <tr onclick="window.location.href='{{ url_for('bookings.my_clicked_courses', appointment_id=kurs.id) }}'" style="cursor:pointer;">
-            <td>{{ kurs.Kursname }}</td>
-            <td>{{ kurs.Termin }}</td>
-            <td>{{ kurs.Kursleiter }}</td>
-            <td>{{ kurs.Raum }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">{{ kurs.Kursname }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">{{ kurs.Termin }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">{{ kurs.Kursleiter }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">{{ kurs.Raum }}</td>
             {% if kurs.Storniert == "False" %}
-                <td>Nein</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">Nein</td>
             {% elif kurs.Storniert == "True"%}
-                <td>Ja</td>
+                <td style="border: 1px solid #ccc; padding: 8px;">Ja</td>
             {% endif %}
             </tr>
         {% endfor %}

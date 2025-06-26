@@ -62,15 +62,16 @@ def clicked_course(course_id):
 
 
 
-#if course still has 1 place left but another user clicked faster than the other, flash warnsignal
+#if course is full, flash warnsignal
 #course can only be taken once a day , if you want to book more than 1 course in the same day, flash warnsignal
 #if course has been succesfully booked
 @bp_bookings.route('/booked_course/<string:appointment_id>', methods=['POST'])
 def booked_course(appointment_id):
     appointment = Appointment.objects(id=ObjectId(appointment_id)).first()
 
+
     if len(appointment.students) == appointment.max_students:
-        flash("Der Kurs Kurs ist voll", 'danger')
+        flash("Der Kurs ist voll", 'danger')
         return redirect(url_for('bookings.home'))
 
     samedate = Appointment.objects(date=appointment.date, students= current_user).first()
