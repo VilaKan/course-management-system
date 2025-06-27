@@ -9,24 +9,24 @@
 <table id="userTable" style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
     <thead style="position: sticky; top: 0; background-color: #f9f9f9;">
         <tr>
-            <th style="border: 1px solid #ccc; padding: 8px;">Kursname</th>
-            <th style="border: 1px solid #ccc; padding: 8px;">Termin</th>
-            <th style="border: 1px solid #ccc; padding: 8px;">Kursleiter</th>
-            <th style="border: 1px solid #ccc; padding: 8px;">Raum</th>
-            <th style="border: 1px solid #ccc; padding: 8px;">Storniert</th>
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Kursname</th>
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Termin</th>
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Kursleiter</th>
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Raum</th>
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Storniert</th>
         </tr>
     </thead>
     <tbody>
         {% for kurs in my_courses %}
             <tr onclick="window.location.href='{{ url_for('bookings.my_clicked_courses', appointment_id=kurs.id) }}'" style="cursor:pointer;">
-            <td style="border: 1px solid #ccc; padding: 8px;">{{ kurs.Kursname }}</td>
-            <td style="border: 1px solid #ccc; padding: 8px;">{{ kurs.Termin }}</td>
-            <td style="border: 1px solid #ccc; padding: 8px;">{{ kurs.Kursleiter }}</td>
-            <td style="border: 1px solid #ccc; padding: 8px;">{{ kurs.Raum }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; text-align: center; ">{{ kurs.Kursname }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ kurs.Termin }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; text-align: center; ">{{ kurs.Kursleiter }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ kurs.Raum }}</td>
             {% if kurs.Storniert == "False" %}
-                <td style="border: 1px solid #ccc; padding: 8px;">Nein</td>
+                <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">Nein</td>
             {% elif kurs.Storniert == "True"%}
-                <td style="border: 1px solid #ccc; padding: 8px;">Ja</td>
+                <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">Ja</td>
             {% endif %}
             </tr>
         {% endfor %}

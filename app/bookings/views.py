@@ -65,6 +65,7 @@ def clicked_course(course_id):
 #if course is full, flash warnsignal
 #course can only be taken once a day , if you want to book more than 1 course in the same day, flash warnsignal
 #if course has been succesfully booked
+#if appointment is canceled flash warnsignal
 @bp_bookings.route('/booked_course/<string:appointment_id>', methods=['POST'])
 def booked_course(appointment_id):
     appointment = Appointment.objects(id=ObjectId(appointment_id)).first()
@@ -77,6 +78,12 @@ def booked_course(appointment_id):
     samedate = Appointment.objects(date=appointment.date, students= current_user).first()
     if samedate:
         flash("Du hast bereits einen Termin am selben Tag belegt",'danger')
+        return redirect(url_for('bookings.home'))
+
+    appointment_canceled = Appointment.objects(canceled=appointment.canceled == True).first()
+
+    if appointment_canceled:
+        flash("Der Termin findet nicht mehr statt", 'danger')
         return redirect(url_for('bookings.home'))
 
 
@@ -153,6 +160,12 @@ def confirmed_participant_pdf(appointment_id):
 
     if appointments.date > datetime.now().date():
         flash("Teilnahmenachweis erst nach Kurstermin möglich, bitte versuche es erneut sobald der Kurs abgeschlossen ist",'danger')
+        return redirect(url_for('bookings.my_clicked_courses', appointment_id=appointments.id))
+
+    appointment_canceled = Appointment.objects(canceled=appointments.canceled == True).first()
+
+    if appointment_canceled:
+        flash("Der Termin wurde storniert, Teilnahmenachweis nicht möglich ", 'danger')
         return redirect(url_for('bookings.my_clicked_courses', appointment_id=appointments.id))
 
 
