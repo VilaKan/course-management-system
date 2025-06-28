@@ -10,19 +10,11 @@ class TestCourseManagement:
         assert rv.status_code == 302
         assert '/login' in rv.headers['Location']
 
-    # FT2.1a: Kursliste wird nach Login angezeigt
-    def test_course_list_visible_after_login(self, testapp):
-        """Kursliste lädt erfolgreich nach Login"""
-        login_as_admin(testapp)
-        rv = testapp.get('/course_list/')
-        assert rv.status_code == 200
-        assert 'Kursliste' in rv.get_data(as_text=True)
-
     # FT2.1b: Kursliste zeigt Meldung bei leerer Datenbank
     def test_course_list_empty_shows_no_courses_message(self, testapp):
         """Kursliste zeigt Hinweis bei leerer Datenbank"""
         login_as_admin(testapp)
-        Course.objects.delete()  # sicherstellen, dass keine Kurse vorhanden sind
+        Course.objects.delete()
         rv = testapp.get('/course_list/')
         assert rv.status_code == 200
         assert 'Noch keine Kurse vorhanden' in rv.get_data(as_text=True)
@@ -45,6 +37,14 @@ class TestCourseManagement:
         }, follow_redirects=True)
         assert rv.status_code == 200
         assert 'Testkurs 999' in rv.get_data(as_text=True)
+
+    # FT2.1a: Kursliste wird nach Login angezeigt
+    def test_course_list_visible_after_login(self, testapp):
+        """Kursliste lädt erfolgreich nach Login"""
+        login_as_admin(testapp)
+        rv = testapp.get('/course_list/')
+        assert rv.status_code == 200
+        assert 'Kursliste' in rv.get_data(as_text=True)
 
     # FT2.2b: Kurs anlegen mit leeren Feldern wird abgefangen
     def test_course_create_empty_fields(self, testapp):
