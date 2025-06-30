@@ -27,7 +27,8 @@ def home():
 
             # Prüfen: kein Datum in der Vergangenheit
             if datum < datetime.now().date():
-                error = "Ein Termin kann nicht in der Vergangenheit liegen."
+                flash("Ein Termin kann nicht in der Vergangenheit liegen.", "danger")
+                return redirect(url_for('schedule_mgmt.home'))
             else:
                 kurs = Course.objects(id=kurs_id).first()
                 raum = Room.objects(id=raum_id).first()

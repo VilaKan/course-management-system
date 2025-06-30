@@ -179,6 +179,19 @@ def create_users():
     teacher.save()
     click.echo('Teacher user with username teacher@test.de and password test created')
 
+    ## Create second Teacher
+    teacher2_email = "teacher2@test.de"
+    teacher2 = User(
+        username=teacher2_email,
+        password=generate_password_hash("test"),
+        email=teacher2_email,
+        role=teacher_role,
+        date_of_birth=datetime.datetime(1994, 6, 15),
+        is_active=True
+    )
+    teacher2.save()
+    click.echo('Teacher user with username teacher2@test.de and password test created')
+
     for i in range(0, 11):
         email = f"student{i}@test.de"
         student = User(
