@@ -1,18 +1,26 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h2>Kurs bearbeiten</h2>
+<!-- Überschrift oben, zentriert -->
+<h1 class="text-center mb-5 display-4">Kurs bearbeiten</h1>
+
+<!-- Formular für Kursbearbeitung -->
 <form method="POST">
   <div class="form-group">
+    <!-- Eingabefeld für Kursname, wird mit vorhandenem Namen vorausgefüllt -->
     <label for="name">Kursname:</label>
     <input type="text" class="form-control" name="name" id="name" value="{{ course.name }}" required>
   </div>
+
   <div class="form-group">
+    <!-- Textbereich für Beschreibung, ebenfalls vorausgefüllt -->
     <label for="description">Beschreibung:</label>
     <textarea class="form-control" name="description" id="description">{{ course.description }}</textarea>
   </div>
+
   <br>
-  <button type="submit" class="btn btn-primary">Speichern</button>
-  <a href="{{ url_for('course_list.home') }}" class="btn btn-secondary">Abbrechen</a>
+  <!-- Speichern und Abbrechen-Buttons -->
+  <button type="submit" class="btn btn-primary">💾 Speichern</button>
+  <a href="{{ url_for('course_list.home') }}" class="btn btn-secondary">❌ Abbrechen</a>
 </form>
 {% endblock %}
