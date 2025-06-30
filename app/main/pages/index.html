@@ -1,47 +1,44 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Willkommen zur Kursverwaltungsplattform{% endblock %}
 
 {% block body %}
-    <div class="mt-4 p-5 bg-primary text-white rounded">
-        <h1>Flask Example</h1>
-        <p>The starting point for a new flask application</p>
-    </div>
 
-    <div class="row">
-        <div class="my-5 p-2 col-lg-12">
-            <h1>What you find here:</h1>
-        </div>
-    </div>
-
-    <div class="row row-cols-2 g-2">
-        <div class="col">
-            <div class="bg-info bg-opacity-10 border rounded border-info p-2">
-                <h3>Modular Structure</h3>
-                <p>There are many poorly structured examples on the web.</p>
-                <p>This example includes a best practices setup with blueprints to enable smooth scaling of apps.</p>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="bg-info bg-opacity-10 border rounded border-info p-2">
-                <h3>Flask Extensions</h3>
-                <p>Several flask extensions are included to handle the common tasks of web developers.
-                    The included extensions are:</p> <p>flask-login, flask-assets, flask-WTF and flask-mongoengine.</p>
-            </div>
-        </div>
-        <div class="col">
-            <div class="bg-info bg-opacity-10 border rounded border-info p-2">
-                <h3>Tests</h3>
-                <p>Example tests, built with py.test, are included in to demonstrate how to test a flask app.</p>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="bg-info bg-opacity-10 border rounded border-info p-2">
-                <h3>Common Libraries</h3>
-                <p>The CSS and JS files for Bootstrap are included, along with jQuery.</p>
+{% if not current_user.is_authenticated %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="container">
+        <div class="p-5 mb-4 bg-white rounded-3 shadow">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <h1 class="display-5 fw-bold">Kursverwaltung</h1>
+                    <p class="fs-4">
+                        Diese Webanwendung dient der Verwaltung von Mitarbeiterschulungen.
+                        Benutzer können Module einsehen, Termine buchen und ihre Teilnahme auswerten.
+                    </p>
+                    <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg mt-3 d-block d-md-inline mx-auto">Jetzt einloggen</a>
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="{{ url_for('main.static', filename='img/undraw_educator_6dgp.png') }}"
+                         alt="Schulung" class="img-fluid" style="max-height: 300px;">
+                </div>
             </div>
         </div>
     </div>
+</div>
+{% else %}
+
+<h2 class="mt-5 text-center">Willkommen im Kursportal!</h2>
+
+{% if current_user.role.name == "Admin" %}
+<p class="text-center text-muted">Als Administrator kannst du Benutzer verwalten, Kurse anlegen und bearbeiten, sowie Statistiken zur Nutzung einsehen.</p>
+
+{% elif current_user.role.name == "Teacher" %}
+<p class="text-center text-muted">Als Dozent kannst du deine zugewiesenen Kurstermine einsehen und Teilnehmerlisten für deine Schulungen erstellen.</p>
+
+{% elif current_user.role.name == "User" %}
+<p class="text-center text-muted">Als Nutzer kannst du Schulungstermine belegen und deine gebuchten Kurse einsehen</p>
+
+{% endif %}
+
+{% endif %}
 {% endblock %}

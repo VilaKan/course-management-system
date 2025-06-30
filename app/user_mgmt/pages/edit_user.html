@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Nutzer bearbeiten{% endblock %}
+
+{% block body %}
+<h2 style="text-align: center;">Benutzer bearbeiten</h2>
+
+
+<form method="POST" id="editForm">
+  <!-- E-Mail -->
+  <div class="form-group">
+    <label for="email">E-Mail:</label>
+    <input type="email" class="form-control {% if invalid_email %}is-invalid{% endif %}" name="email" id="email" value="{{ user.email }}" required>
+    {% if invalid_email %}
+      <div class="invalid-feedback">Bitte eine gültige E-Mail-Adresse eingeben.</div>
+    {% endif %}
+  </div>
+
+  <!-- Passwort -->
+  <div class="form-group">
+    <label for="password">Neues Passwort:</label>
+    <input type="password" class="form-control {% if weak_password %}is-invalid{% endif %}" name="password" id="password">
+    <small class="form-text text-muted">Nur ausfüllen, wenn das Passwort geändert werden soll.</small>
+    {% if weak_password %}
+      <div class="invalid-feedback">Das Passwort muss mindestens 8 Zeichen lang sein.</div>
+    {% endif %}
+  </div>
+
+  <!-- Rolle -->
+  <div class="form-group">
+    <label for="role">Rolle:</label>
+    <select class="form-control" id="role" name="role" required>
+      {% for r in roles %}
+        <option value="{{ r.name }}" {% if user.role.name == r.name %}selected{% endif %}>{{ r.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- Geburtsdatum -->
+  <div class="form-group">
+    <label for="geburtsdatum">Geburtsdatum:</label>
+    <input type="date" class="form-control" name="geburtsdatum" id="geburtsdatum"
+           value="{{ user.date_of_birth.strftime('%Y-%m-%d') }}" required>
+  </div>
+</form>
+
+<!-- Buttonbereich -->
+<div class="mt-4 d-flex justify-content-between">
+  <!-- Links: Speichern und Abbrechen -->
+  <div>
+    <button type="submit" form="editForm" class="btn btn-primary">💾 Speichern</button>
+    <a href="{{ url_for('user_mgmt.home') }}" class="btn btn-secondary">❌ Abbrechen</a>
+  </div>
+
+  <!-- Rechts: Aktivieren/Deaktivieren -->
+  <form method="POST" action="{{ url_for('user_mgmt.toggle_user_active', user_id=user.id) }}">
+    {% if user.is_active %}
+      <button type="submit" class="btn btn-danger">🚫 Deaktivieren</button>
+    {% else %}
+      <button type="submit" class="btn btn-success">✅ Reaktivieren</button>
+    {% endif %}
+  </form>
+</div>
+{% endblock %}

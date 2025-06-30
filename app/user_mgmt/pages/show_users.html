@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Nutzerliste{% endblock %}
+
+{% block body %}
+<h2 style="text-align: center;">Benutzerliste</h2>
+
+<!-- 🔍 Filterbereich -->
+<div class="mb-3">
+  <div class="d-flex align-items-center gap-3 flex-wrap">
+    <div>
+      <label for="role_filter" class="form-label">Rolle:</label>
+      <select id="role_filter" class="form-select">
+        <option value="">Alle</option>
+        <option value="Admin">Admin</option>
+        <option value="Teacher">Teacher</option>
+        <option value="User">User</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="userSearch" class="form-label">Suchen (E-Mail):</label>
+      <input type="text" id="userSearch" class="form-control" placeholder="E-Mail suchen...">
+    </div>
+  </div>
+</div>
+
+<!-- 📋 Nutzerliste -->
+<div style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc;">
+  <table id="userTable" style="width: 100%; border-collapse: collapse;">
+    <thead style="position: sticky; top: 0; background-color: #f9f9f9;">
+      <tr>
+        <th style="border: 1px solid #ccc; padding: 8px;">E-Mail</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Rolle</th>
+        <th style="border: 1px solid #ccc; padding: 8px;">Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{ user.username }}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">{{ user.role.name }}</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">
+          <a href="{{ url_for('user_mgmt.edit_user', user_id=user.id) }}">🛠️</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ➕ Benutzer hinzufügen Button -->
+<div style="margin-top: 20px;">
+  <a href="{{ url_for('user_mgmt.add_user') }}" class="btn btn-primary">+ Benutzer anlegen</a>
+</div>
+
+<!-- 🔎 Filter-Script -->
+<script>
+  const roleFilter = document.getElementById('role_filter');
+  const searchInput = document.getElementById('userSearch');
+  const rows = document.querySelectorAll('#userTable tbody tr');
+
+  function applyFilter() {
+    const searchValue = searchInput.value.toLowerCase();
+    const selectedRole = roleFilter.value;
+
+    rows.forEach(row => {
+      const email = row.children[0].textContent.toLowerCase();
+      const role = row.children[1].textContent;
+
+      const matchesSearch = email.includes(searchValue);
+      const matchesRole = !selectedRole || role === selectedRole;
+
+      row.style.display = matchesSearch && matchesRole ? '' : 'none';
+    });
+  }
+
+  roleFilter.addEventListener('change', applyFilter);
+  searchInput.addEventListener('keyup', applyFilter);
+</script>
+
+{% endblock %}

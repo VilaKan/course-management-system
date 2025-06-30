@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Terminverwaltung{% endblock %}
+
+{% block body %}
+<h1 style="text-align: center;">Termine verwalten</h1>
+
+{% if termine %}
+  <!-- Scrollbarer Tabellenbereich -->
+  <div style="max-height: 500px; overflow-y: auto; border: 1px solid #ccc;">
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead style="position: sticky; top: 0; background-color: #f9f9f9;">
+        <tr>
+          <th style="border: 1px solid #ccc; padding: 8px;">Kurs</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Datum</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Raum</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Dozent</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Max.Teilnehmer</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Status</th>
+          <th style="border: 1px solid #ccc; padding: 8px;">Aktion</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for termin in termine %}
+          <tr style="background-color: {{ loop.index0 % 2 == 0 and '#ffffff' or '#f2f2f2' }};">
+            <td style="border: 1px solid #ccc; padding: 8px;">{{ termin.course.name }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">{{ termin.date.strftime('%Y-%m-%d') if termin.date else '' }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">{{ termin.room.name }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">{{ termin.teacher.email }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">{{ termin.max_students }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">
+              {% if termin.canceled %}
+                <span style="color: red; font-weight: bold;">Gecancelt</span>
+              {% elif termin.date and termin.date < now %}
+                <span style="color: green; font-weight: bold;">Stattgefunden</span>
+              {% else %}
+                Aktiv
+              {% endif %}
+            </td>
+            <td style="border: 1px solid #ccc; padding: 8px;">
+              {% if not termin.canceled and termin.date >= now %}
+                <form method="post" style="margin:0;" onsubmit="return confirmCancel('{{ termin.course.name }}');">
+                  <input type="hidden" name="termin_id" value="{{ termin.id }}">
+                  <button type="submit" name="cancel_termin" style="padding: 2px 16px">🚫</button>
+                </form>
+              {% else %}
+                -
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Immer sichtbares Formular zum Hinzufügen -->
+  <div style="margin-top: 10px; border: 1px solid #ccc; padding: 10px; background-color: #f9f9f9;">
+    <form method="post" style="display: grid; grid-template-columns: repeat(6, 1fr) auto; gap: 10px; align-items: center;">
+
+      <select name="kurs" required>
+        {% for kurs in courses %}
+          <option value="{{ kurs.id }}">{{ kurs.name }}</option>
+        {% endfor %}
+      </select>
+
+      <input type="date" name="datum" required>
+
+      <select name="raum" required>
+        {% for raum in rooms %}
+          <option value="{{ raum.id }}">{{ raum.name }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="dozent" required>
+        {% for lehrer in teachers %}
+          <option value="{{ lehrer.id }}">{{ lehrer.email }}</option>
+        {% endfor %}
+      </select>
+
+      <input type="number" name="max_teilnehmer" min="1" required>
+
+      <div></div> <!-- Platzhalter für Status-Spalte -->
+
+      <button type="submit" name="add_termin" style="padding: 3px 24px" >➕</button>
+    </form>
+  </div>
+
+{% else %}
+  <p>Noch keine Termine vorhanden.</p>
+{% endif %}
+
+<script>
+  function confirmCancel(courseName) {
+    return confirm(`Sind Sie sicher, dass der Termin für "${courseName}" storniert werden soll?`);
+  }
+</script>
+
+{% endblock %}
