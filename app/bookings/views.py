@@ -82,7 +82,7 @@ def booked_course(appointment_id):
 
     appointment_canceled = Appointment.objects(canceled=appointment.canceled == True).first()
 
-    if appointment_canceled:
+    if appointment.canceled:
         flash("Der Termin findet nicht mehr statt", 'danger')
         return redirect(url_for('bookings.home'))
 
