@@ -49,11 +49,11 @@
     <div class="vh-100 row content">
         {% if current_user.is_authenticated %}
         <div class="col-sm-2 sidenav">
-            {% if current_user.role.name in 'User' %}
+            {% if current_user.role.name == 'User' %}
             <p class="h5"><a href="{{ url_for('bookings.home') }}">Terminübersicht</a></p>
             <p class="h5"><a href="{{ url_for('bookings.my_courses') }}">Meine Kurse</a></p>
             {% endif %}
-            {% if current_user.role.name in 'Teacher' %}
+            {% if current_user.role.name == 'Teacher' %}
             <p class="h5"><a href="{{ url_for('dozent.home') }}">Meine Termine</a></p>
             {% endif %}
             {% if current_user.role.name == 'Admin' %}
