@@ -4,34 +4,34 @@
 
 {% block body %}
 <h1 style="text-align: center;">Terminübersicht</h1>
-<table class="table table-hover">
-    <thead>
+<div style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc;">
+ <table id="userTable" style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
+    <thead style="position: sticky; top: 0; background-color: #f9f9f9; border: z-index: 1;">
         <tr>
-            <th>Kursname</th>
-            <th>Termin</th>
-            <th>Kursleiter</th>
-            <th>Freie Plaetze</th>
-            <th>Raum</th>
-            <th>Storniert</th>
-
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Kursname</th>
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Termin</th>
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Kursleiter</th>
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Freie Plätze</th>
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Raum</th>
+            <th style="border: 1px solid #ccc; padding: 8px; text-align: center;">Storniert</th>
         </tr>
-    </thead>
-    <tbody>
+     </thead>
+     <tbody>
         {% for data in table_data %}
          <tr onclick="window.location.href='{{ url_for('bookings.clicked_course', course_id=data.id) }}'" style="cursor:pointer;">
-            <td>{{ data.Kursname }}</td>
-            <td>{{ data.Termin }}</td>
-            <td>{{ data.Kursleiter }}</td>
-            <td>{{ data.Freie_Plaetze }}/{{ data.Max_studenten }}</td>
-            <td>{{ data.Raum}}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ data.Kursname }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ data.Termin }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ data.Kursleiter }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ data.Freie_Plaetze }}/{{ data.Max_studenten }}</td>
+            <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ data.Raum}}</td>
             {% if data.Storniert == "False" %}
-                <td>Nein</td>
+                <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">Nein</td>
             {% elif data.Storniert == "True"%}
-                <td>Ja</td>
+                <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">Ja</td>
             {% endif %}
-
-        </tr>
+         </tr>
         {% endfor %}
-    </tbody>
-</table>
+     </tbody>
+ </table>
+</div>
 {% endblock %}
