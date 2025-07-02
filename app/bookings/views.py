@@ -13,6 +13,8 @@ from textwrap import wrap
 
 
 
+
+
 bp_bookings = Blueprint('bookings', __name__, template_folder='pages')
 
 #appointment-table with all appointments from courseleader/Admin created
@@ -34,7 +36,7 @@ def home():
         if current_user in appointment.students :
             continue
 
-        new_row = {'id': str(appointment.course.id),
+        new_row = {'id': str(appointment.id),
                    'Kursname': f'{appointment.course.name}',
                    'Termin': f"{appointment.date.strftime('%d.%m.%Y')}",
                    'Kursleiter' : f'{appointment.teacher.username}'
@@ -50,10 +52,10 @@ def home():
 
 # Benutzer sieht die Terminübersicht und wählt ein Termin seiner Wahl aus und wird weitergeleitet zu den
 # Inforrmationen und zu einem Button mit "Kurs belegen"
-@bp_bookings.route('/course/<string:course_id>')
+@bp_bookings.route('/course/<string:appointment_id>')
 @login_required
-def clicked_course(course_id):
-    appointment = Appointment.objects(course=ObjectId(course_id)).first()
+def clicked_course(appointment_id):
+    appointment = Appointment.objects(id=ObjectId(appointment_id)).first()
 
 
     return render_template('clicked_course.html', appointment=appointment, appointment_id=appointment.id, info=session)
@@ -75,17 +77,15 @@ def booked_course(appointment_id):
         flash("Der Kurs ist voll", 'danger')
         return redirect(url_for('bookings.home'))
 
-    samedate = Appointment.objects(date=appointment.date, students= current_user).first()
+    samedate = Appointment.objects(date=appointment.date, students=current_user, canceled=False).first()
+
     if samedate:
         flash("Du hast bereits einen Termin am selben Tag belegt",'danger')
         return redirect(url_for('bookings.home'))
 
-    appointment_canceled = Appointment.objects(canceled=appointment.canceled == True).first()
-
-    if appointment_canceled:
+    if appointment.canceled:
         flash("Der Termin findet nicht mehr statt", 'danger')
         return redirect(url_for('bookings.home'))
-
 
     appointment.students.append(current_user)
     appointment.save()
@@ -162,9 +162,8 @@ def confirmed_participant_pdf(appointment_id):
         flash("Teilnahmenachweis erst nach Kurstermin möglich, bitte versuche es erneut sobald der Kurs abgeschlossen ist",'danger')
         return redirect(url_for('bookings.my_clicked_courses', appointment_id=appointments.id))
 
-    appointment_canceled = Appointment.objects(canceled=appointments.canceled == True).first()
 
-    if appointment_canceled:
+    if appointments.canceled:
         flash("Der Termin wurde storniert, Teilnahmenachweis nicht möglich ", 'danger')
         return redirect(url_for('bookings.my_clicked_courses', appointment_id=appointments.id))
 
@@ -189,11 +188,6 @@ def confirmed_participant_pdf(appointment_id):
     p.save()
     buffer.seek(0)
     return send_file(buffer,mimetype='application/pdf', download_name='teilnahmebestätigung.pdf',as_attachment=True)
-
-
-
-
-
 
 
 
