@@ -50,8 +50,8 @@ def home():
 
 
 
-# Benutzer sieht die Terminübersicht und wählt ein Termin seiner Wahl aus und wird weitergeleitet zu den
-# Inforrmationen und zu einem Button mit "Kurs belegen"
+# The user views the schedule overview, selects a date of their choice,
+# and is redirected to the course information and a button labeled "Enroll in course"
 @bp_bookings.route('/course/<string:appointment_id>')
 @login_required
 def clicked_course(appointment_id):
