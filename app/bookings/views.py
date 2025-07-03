@@ -13,6 +13,8 @@ from textwrap import wrap
 
 
 
+
+
 bp_bookings = Blueprint('bookings', __name__, template_folder='pages')
 
 #appointment-table with all appointments from courseleader/Admin created
@@ -31,15 +33,12 @@ def home():
         if appointment.date < datetime.now().date() :
             continue
 
-        if len(appointment.students)==appointment.max_students :
-            continue
-
         if current_user in appointment.students :
             continue
 
-        new_row = {'id': str(appointment.course.id),
+        new_row = {'id': str(appointment.id),
                    'Kursname': f'{appointment.course.name}',
-                   'Termin': f'{appointment.date.strftime('%d.%m.%Y')}',
+                   'Termin': f"{appointment.date.strftime('%d.%m.%Y')}",
                    'Kursleiter' : f'{appointment.teacher.username}'
                   ,'Freie_Plaetze': f'{appointment.max_students - len(appointment.students)}',
                    'Max_studenten': f'{appointment.max_students}',
@@ -51,12 +50,12 @@ def home():
 
 
 
-# Benutzer sieht die Terminübersicht und wählt ein Termin seiner Wahl aus und wird weitergeleitet zu den
-# Inforrmationen und zu einem Button mit "Kurs belegen"
-@bp_bookings.route('/course/<string:course_id>')
+# The user views the schedule overview, selects a date of their choice,
+# and is redirected to the course information and a button labeled "Enroll in course"
+@bp_bookings.route('/course/<string:appointment_id>')
 @login_required
-def clicked_course(course_id):
-    appointment = Appointment.objects(course=ObjectId(course_id)).first()
+def clicked_course(appointment_id):
+    appointment = Appointment.objects(id=ObjectId(appointment_id)).first()
 
 
     return render_template('clicked_course.html', appointment=appointment, appointment_id=appointment.id, info=session)
@@ -65,22 +64,28 @@ def clicked_course(course_id):
 
 
 
-#if course still has 1 place left but another user clicked faster than the other, flash warnsignal
+#if course is full, flash warnsignal
 #course can only be taken once a day , if you want to book more than 1 course in the same day, flash warnsignal
 #if course has been succesfully booked
+#if appointment is canceled flash warnsignal
 @bp_bookings.route('/booked_course/<string:appointment_id>', methods=['POST'])
 def booked_course(appointment_id):
     appointment = Appointment.objects(id=ObjectId(appointment_id)).first()
 
+
     if len(appointment.students) == appointment.max_students:
-        flash("Der Kurs wurde soeben von einem anderen Nutzer belegt worden", 'danger')
+        flash("Der Kurs ist voll", 'danger')
         return redirect(url_for('bookings.home'))
 
-    samedate = Appointment.objects(date=appointment.date, students= current_user).first()
+    samedate = Appointment.objects(date=appointment.date, students=current_user, canceled=False).first()
+
     if samedate:
         flash("Du hast bereits einen Termin am selben Tag belegt",'danger')
         return redirect(url_for('bookings.home'))
 
+    if appointment.canceled:
+        flash("Der Termin findet nicht mehr statt", 'danger')
+        return redirect(url_for('bookings.home'))
 
     appointment.students.append(current_user)
     appointment.save()
@@ -158,6 +163,11 @@ def confirmed_participant_pdf(appointment_id):
         return redirect(url_for('bookings.my_clicked_courses', appointment_id=appointments.id))
 
 
+    if appointments.canceled:
+        flash("Der Termin wurde storniert, Teilnahmenachweis nicht möglich ", 'danger')
+        return redirect(url_for('bookings.my_clicked_courses', appointment_id=appointments.id))
+
+
     buffer= BytesIO()
     p = canvas.Canvas(buffer, pagesize=A4)
 
@@ -178,9 +188,6 @@ def confirmed_participant_pdf(appointment_id):
     p.save()
     buffer.seek(0)
     return send_file(buffer,mimetype='application/pdf', download_name='teilnahmebestätigung.pdf',as_attachment=True)
-
-
-
 
 
 
