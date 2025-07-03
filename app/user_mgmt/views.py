@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, request, redirect, url_for, flash
-from flask_login import login_required
+from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from app.users.models import User
 from app.role.model import Role
@@ -8,23 +8,27 @@ import datetime
 
 bp_user_mgmt = Blueprint('user_mgmt', __name__, template_folder='pages')
 
+
 @bp_user_mgmt.route('/')
 @login_required
 def home():
+    # Admin-Zugriff prüfen
+    if not hasattr(current_user, "role") or current_user.role.name != "Admin":
+        flash("Zugriff verweigert: Nur Administratoren erlaubt.", "danger")
+        return redirect(url_for("main.home"))
+
     role_filter = request.args.get('role', '').strip()
     search_filter = request.args.get('search', '').strip()
 
-    # Alle User holen
     users = User.objects.select_related()
 
-    # Filter anwenden (in Python, nicht direkt in MongoEngine!)
     if role_filter:
         users = [u for u in users if u.role and u.role.name == role_filter]
-
     if search_filter:
         users = [u for u in users if search_filter.lower() in u.username.lower()]
 
     return render_template('show_users.html', info=session, users=users)
+
 
 @bp_user_mgmt.route('/edit/<user_id>', methods=['GET', 'POST'])
 @login_required
@@ -45,17 +49,14 @@ def edit_user(user_id):
         new_role_name = request.form.get('role', '').strip()
         new_dob = request.form.get('geburtsdatum', '').strip()
 
-        # E-Mail validieren
         try:
             validate_email(new_email)
         except EmailNotValidError:
             invalid_email = True
 
-        # Passwort prüfen (nur wenn eins eingegeben wurde)
         if new_password and len(new_password) < 8:
             weak_password = True
 
-        # Fehlerbehandlung
         if not new_email or not new_role_name or not new_dob or invalid_email or weak_password:
             flash("Bitte alle Felder korrekt ausfüllen.", "danger")
             return render_template(
@@ -67,7 +68,6 @@ def edit_user(user_id):
                 weak_password=weak_password
             )
 
-        # Prüfung auf doppelte E-Mail
         if new_email != user.username and User.objects(username=new_email).first():
             flash("Ein anderer User mit dieser E-Mail existiert bereits.", "warning")
             return render_template(
@@ -79,7 +79,6 @@ def edit_user(user_id):
                 weak_password=False
             )
 
-        # Werte speichern
         user.email = new_email
         user.username = new_email
 
@@ -104,6 +103,7 @@ def edit_user(user_id):
         invalid_email=False,
         weak_password=False
     )
+
 
 @bp_user_mgmt.route('/add', methods=['GET', 'POST'])
 @login_required
@@ -190,6 +190,7 @@ def add_user():
         password_too_short=False
     )
 
+
 @bp_user_mgmt.route('/deactivate/<user_id>', methods=['POST'])
 @login_required
 def deactivate_user(user_id):
@@ -208,11 +209,11 @@ def deactivate_user(user_id):
 
     return redirect(url_for('user_mgmt.home'))
 
+
 @bp_user_mgmt.route('/toggle_active/<user_id>', methods=['POST'])
 @login_required
 def toggle_user_active(user_id):
     user = User.objects(id=user_id).first()
-
     if not user:
         flash("Benutzer nicht gefunden.", "danger")
     else:
@@ -222,4 +223,3 @@ def toggle_user_active(user_id):
         flash(f"Benutzer wurde {status}.", "success")
 
     return redirect(url_for('user_mgmt.edit_user', user_id=user_id))
-
