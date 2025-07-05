@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, abort, flash
+from flask import Blueprint, render_template, request, redirect, url_for, abort, flash, session
 from flask_login import login_required, current_user
 from datetime import datetime
 from app.appointment.model import Appointment
@@ -26,13 +26,20 @@ def home():
             datum = datetime.strptime(datum_str, "%Y-%m-%d").date()
 
             # Prüfen: kein Datum in der Vergangenheit
-            if datum < datetime.now().date():
+            if datum <= datetime.now().date():
                 flash("Ein Termin kann nicht in der Vergangenheit liegen.", "danger")
                 return redirect(url_for('schedule_mgmt.home'))
             else:
                 kurs = Course.objects(id=kurs_id).first()
                 raum = Room.objects(id=raum_id).first()
                 dozent = User.objects(id=dozent_id).first()
+
+                #Prüfen, ob an diesem Tag bereits ein Termin in diesem Raum ist (unabhängig vom Kurs/Dozent)
+                konflikt_raum_belegt = Appointment.objects(
+                    date=datum,
+                    room=raum,
+                    canceled=False
+                ).first()
 
                 # Prüfen: gleicher Kurs/Raum/Tag
                 konflikt_kurs_raum = Appointment.objects(
@@ -58,7 +65,9 @@ def home():
                     canceled=False
                 ).first()
 
-                if konflikt_kurs_raum:
+                if konflikt_raum_belegt:
+                    flash(f"Der Raum {raum.name} ist an diesem Tag bereits belegt.", "danger")
+                elif konflikt_kurs_raum:
                     flash(f"An diesem Tag findet bereits ein Kurs im Raum {raum.name} statt.", "danger")
                 elif konflikt_dozent:
                     flash(f"Dozent {dozent.email} ist an diesem Tag bereits eingeteilt.", "danger")
@@ -85,7 +94,7 @@ def home():
 
         return redirect(url_for('schedule_mgmt.home'))
 
-    termine = Appointment.objects().order_by('date')
+    termine = Appointment.objects().order_by('-date')
     courses = Course.objects()
     rooms = Room.objects()
     teacher_role = Role.objects(name="Teacher").first()
@@ -100,5 +109,5 @@ def home():
         rooms=rooms,
         teachers=teachers,
         now=now,
-        info=None,
+        info=session,
     )
