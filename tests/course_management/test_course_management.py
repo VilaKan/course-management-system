@@ -17,7 +17,7 @@ class TestCourseManagement:
         Course.objects.delete()
         rv = testapp.get('/course_list/')
         assert rv.status_code == 200
-        assert 'Noch keine Kurse vorhanden' in rv.get_data(as_text=True)
+        assert 'Noch keine Kurse vorhanden.' in rv.get_data(as_text=True)
 
     # FT2.4a: Sichtbarkeit – Seite zum Kurs erstellen sichtbar
     def test_course_create_form_visible(self, testapp):
