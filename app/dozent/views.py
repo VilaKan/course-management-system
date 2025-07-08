@@ -1,8 +1,6 @@
 ﻿from flask import Blueprint, render_template, session, request
 from flask_login import login_required, current_user
 from app.appointment.model import Appointment
-from app.course.model import Course
-from app.room.model import Room
 from app.users.models import User
 import datetime
 

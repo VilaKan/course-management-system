@@ -3,5 +3,6 @@ venv
 *cache
 .vscode
 .idea
-/tests/statistics/static/
+/tests/statistics/static/.webassets-cache
+/tests/statistics/static/public
 /tests/main/static/

@@ -5,16 +5,11 @@ from flask import Blueprint, render_template, session, request
 from flask_login import login_required
 from collections import Counter
 
-
 from app.appointment.model import Appointment
 
 # define the blueprint
 bp_statistics = Blueprint('statistics', __name__, template_folder='pages')
 
-
-# all routes
-
-# index is list view
 @bp_statistics.route('/')
 @login_required
 def home():
@@ -22,7 +17,6 @@ def home():
     session['year_only_valid'] = False
     return render_template('statistics.html', info=session, yam_valid = session['yam_valid'], year_only_valid = session['year_only_valid'])
 
-# index is list view
 @bp_statistics.route('/generate_year_and_month', methods=['POST'])
 @login_required
 def generate_year_and_month():
@@ -55,23 +49,7 @@ def generate_year_and_month():
         'Sunday': 'Sonntag'
     }
 
-    # Manual number to month translation
-    translation_months = {
-        '01': 'Januar',
-        '02': 'Februar',
-        '03': 'März',
-        '04': 'April',
-        '05': 'Mai',
-        '06': 'Juni',
-        '07': 'Juli',
-        '08': 'August',
-        '09': 'September',
-        '10': 'Oktober',
-        '11': 'November',
-        '12': 'Dezember'
-    }
-
-    # This prepares the labels (Monday, Tuesday, etc.) for the chart as well as
+    # This prepares the labels (Monday, Tuesday, etc.) for the chart as well as translating them
     labels = [calendar.day_name[i] for i in sorted(weekday_counts)]
     labels_german = [translation_days[day] for day in labels]
     values = [weekday_counts[i] for i in sorted(weekday_counts)]
@@ -79,14 +57,14 @@ def generate_year_and_month():
     # Plot pie chart
     plt.figure(figsize=(6, 6))
     plt.pie(values, labels=labels_german, autopct=generate_counts_factory(values), startangle=90)
-    #plt.title(f'Anzahl der Kurse pro Wochentag im {translation_months[month]} {year}')
     plt.axis('equal')
     plt.tight_layout()
     plt.savefig("static/plots/appointments_pie.png", dpi=300, bbox_inches='tight')
     return render_template('statistics.html', info=session, yam_valid = session['yam_valid'], year_only_valid = session['year_only_valid'])
 
-# Factory function which gets called on every slice of the pie chart
-# This is used to display the actual amount as an integer instead of a percentage which is the default for a matplotlib pie chart
+# Factory function which gets called on every "slice" of the pie chart
+# This is needed because the default behaviour of the pie chart is to only display percentage values instead of raw number counts
+# It is possible to pass a factory with a function to adjust this behaviour and this is exactly what we do here. We need to pass the factory to the autopct argument in our plt.pie call
 def generate_counts_factory(values):
     def generate_counts(pct):
         total = sum(values)
@@ -94,7 +72,6 @@ def generate_counts_factory(values):
         return f'{count}'
     return generate_counts
 
-# index is list view
 @bp_statistics.route('/generate_year_only', methods=['POST'])
 @login_required
 def generate_year_only():
@@ -123,7 +100,6 @@ def generate_year_only():
 
     plt.ylabel("Kursename")
     plt.xlabel("Anzahl der Teilnehmer")
-    #plt.title("Termine pro Wochentag")
     plt.grid(axis='x', linestyle='--', alpha=0.7)
 
     plt.tight_layout()

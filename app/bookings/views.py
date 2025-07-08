@@ -10,11 +10,6 @@ from reportlab.lib.pagesizes import A4
 from io import BytesIO
 from textwrap import wrap
 
-
-
-
-
-
 bp_bookings = Blueprint('bookings', __name__, template_folder='pages')
 
 #appointment-table with all appointments from courseleader/Admin created
@@ -175,7 +170,6 @@ def confirmed_participant_pdf(appointment_id):
     y= height- 60
 
 
-    #text
     text= f"Dies ist eine offizielle Bestätigung, dass {current_user.username} am {appointments.date} erfolgreich am Kurs {appointments.course.name} teilgenommen hat. Der Kurs wurde von {appointments.teacher.username} geleitet und fand im Raum {appointments.room.name} statt"
     p.setFont("Helvetica-Bold", 15)
     wrapped_lines= wrap(text,width=70)

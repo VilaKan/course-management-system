@@ -8,7 +8,6 @@ import datetime
 
 bp_user_mgmt = Blueprint('user_mgmt', __name__, template_folder='pages')
 
-
 @bp_user_mgmt.route('/')
 @login_required
 def home():
@@ -28,7 +27,6 @@ def home():
         users = [u for u in users if search_filter.lower() in u.username.lower()]
 
     return render_template('show_users.html', info=session, users=users)
-
 
 @bp_user_mgmt.route('/edit/<user_id>', methods=['GET', 'POST'])
 @login_required
@@ -103,7 +101,6 @@ def edit_user(user_id):
         invalid_email=False,
         weak_password=False
     )
-
 
 @bp_user_mgmt.route('/add', methods=['GET', 'POST'])
 @login_required
@@ -190,7 +187,6 @@ def add_user():
         password_too_short=False
     )
 
-
 @bp_user_mgmt.route('/deactivate/<user_id>', methods=['POST'])
 @login_required
 def deactivate_user(user_id):
@@ -208,7 +204,6 @@ def deactivate_user(user_id):
         flash("Benutzer wurde deaktiviert.", "success")
 
     return redirect(url_for('user_mgmt.home'))
-
 
 @bp_user_mgmt.route('/toggle_active/<user_id>', methods=['POST'])
 @login_required
