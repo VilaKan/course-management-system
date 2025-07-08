@@ -5,10 +5,7 @@ from app.course.model import Course
 # Blueprint für Kurslisten-Funktionalität
 bp_course_list = Blueprint('course_list', __name__, template_folder='pages')
 
-
-
 # Kursübersicht anzeigen (Startseite)
-
 @bp_course_list.route('/')
 @login_required  # Nur eingeloggte Nutzer dürfen die Seite sehen
 def home():
@@ -16,10 +13,7 @@ def home():
     courses = Course.objects.order_by('name')
     return render_template('course_list.html', courses=courses, info=session)
 
-
-
 # Neuen Kurs erstellen
-
 @bp_course_list.route('/create', methods=['GET', 'POST'])
 @login_required
 def create_course():
@@ -45,10 +39,7 @@ def create_course():
     # Wenn GET oder Fehler: Erstellungsformular anzeigen
     return render_template('course_create.html', info=session)
 
-
-
 # Bestehenden Kurs bearbeiten
-
 @bp_course_list.route('/edit/<course_id>', methods=['GET', 'POST'])
 @login_required
 def edit_course(course_id):

@@ -18,7 +18,7 @@
      </thead>
      <tbody>
         {% for data in table_data %}
-         <tr onclick="window.location.href='{{ url_for('bookings.clicked_course', course_id=data.id) }}'" style="cursor:pointer;">
+         <tr onclick="window.location.href='{{ url_for('bookings.clicked_course', appointment_id=data.id) }}'" style="cursor:pointer;">
             <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ data.Kursname }}</td>
             <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ data.Termin }}</td>
             <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ data.Kursleiter }}</td>
@@ -35,3 +35,4 @@
  </table>
 </div>
 {% endblock %}
+

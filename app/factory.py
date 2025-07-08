@@ -86,7 +86,6 @@ def load_blueprints(app):
 
     from app.users.views import bp_users
     from app.main.views import bp_main
-    from app.books.views import bp_books
     from app.statistics.views import bp_statistics
     from app.schedule_management.views import bp_schedulemanagement
     from app.bookings.views import bp_bookings
@@ -97,7 +96,6 @@ def load_blueprints(app):
     # register blueprints
     app.register_blueprint(bp_main)
     app.register_blueprint(bp_users, url_prefix='/users')
-    app.register_blueprint(bp_books, url_prefix='/books')
     app.register_blueprint(bp_statistics, url_prefix='/statistics')
     app.register_blueprint(bp_schedulemanagement, url_prefix='/schedule_mgmt')
     app.register_blueprint(bp_bookings, url_prefix='/bookings')
